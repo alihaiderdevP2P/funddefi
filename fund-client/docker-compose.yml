@@ -1,0 +1,77 @@
+version: "3.8"
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: crowdfunding-postgres
+    environment:
+      POSTGRES_DB: crowdfunding
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/database/init.sql:/docker-entrypoint-initdb.d/01-init.sql
+      - ./backend/database/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql
+    networks:
+      - crowdfunding-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # NestJS Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: crowdfunding-backend
+    environment:
+      NODE_ENV: development
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+      DB_NAME: crowdfunding
+      JWT_SECRET: your-super-secret-jwt-key
+      PORT: 3001
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+    ports:
+      - "3001:3001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - crowdfunding-network
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    restart: unless-stopped
+
+  # Next.js Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crowdfunding-frontend
+    environment:
+      NODE_ENV: production
+      NEXT_PUBLIC_API_URL: http://backend:3001/api
+      NEXT_PUBLIC_WS_URL: ws://backend:3001
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - crowdfunding-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  crowdfunding-network:
+    driver: bridge

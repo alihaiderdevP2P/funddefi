@@ -1,0 +1,77 @@
+╔════════════════════════════════════════════════════════════════╗
+║                    🤖 FIX AI ERROR - SIMPLE STEPS              ║
+╚════════════════════════════════════════════════════════════════╝
+
+ERROR: "I'm sorry, I couldn't process your request. Please try again."
+
+CAUSE: OpenAI API key is not configured
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ SOLUTION (Takes 2 minutes):
+
+STEP 1: Get Your Free OpenAI API Key
+───────────────────────────────────────
+1. Open browser: https://platform.openai.com/api-keys
+2. Click "Sign up" (or login if you have account)
+3. Click "+ Create new secret key"  
+4. Copy the key (starts with "sk-")
+
+STEP 2: Add Key to Your Project
+───────────────────────────────────────
+Open file: .env
+
+Find this line:
+   OPENAI_API_KEY=YOUR_OPENAI_API_KEY_HERE
+
+Replace with your actual key:
+   OPENAI_API_KEY=sk-proj-abc123xyz...
+
+Save the file!
+
+STEP 3: Restart Your Server
+───────────────────────────────────────
+In terminal:
+1. Press Ctrl+C to stop server
+2. Run: npm run dev
+3. Wait for "Ready" message
+
+STEP 4: Test AI
+───────────────────────────────────────
+Visit: http://localhost:3000/support
+Click: "Start Chat" 
+Type: "Hello"
+
+You should get an AI response! ✨
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 IMPORTANT NOTES:
+
+✓ Free trial gives you $5 credit (hundreds of AI calls!)
+✓ Your .env file is already created - just add the key!
+✓ Never share your API key with anyone
+✓ The key should be ~51 characters long
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+❓ STILL NOT WORKING?
+
+Check these:
+□ API key starts with "sk-" ✓
+□ No spaces around the = sign ✓
+□ Saved the .env file ✓
+□ Restarted the server ✓
+□ OpenAI billing enabled (if no free credits) ✓
+
+Need help? Visit: http://localhost:3000/support
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+
+
+
+
+
+
+

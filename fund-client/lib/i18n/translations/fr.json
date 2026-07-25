@@ -1,0 +1,166 @@
+{
+  "common": {
+    "welcome": "Bienvenue sur FundFlow",
+    "loading": "Chargement...",
+    "error": "Erreur",
+    "success": "Succès",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "delete": "Supprimer",
+    "edit": "Modifier",
+    "create": "Créer",
+    "update": "Mettre à jour",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "close": "Fermer",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "submit": "Soumettre",
+    "confirm": "Confirmer",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "auth": {
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "register": "S'inscrire",
+    "email": "E-mail",
+    "password": "Mot de passe",
+    "name": "Nom",
+    "forgotPassword": "Mot de passe oublié ?",
+    "rememberMe": "Se souvenir de moi",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "createAccount": "Créer un compte",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire"
+  },
+  "campaigns": {
+    "title": "Campagnes",
+    "create": "Créer une Campagne",
+    "myCampaigns": "Mes Campagnes",
+    "featured": "Campagnes en Vedette",
+    "allCampaigns": "Toutes les Campagnes",
+    "searchCampaigns": "Rechercher des campagnes...",
+    "goal": "Objectif",
+    "raised": "Collecté",
+    "backers": "Contributeurs",
+    "daysLeft": "jours restants",
+    "fundCampaign": "Financer la Campagne",
+    "viewDetails": "Voir les Détails",
+    "noCampaigns": "Aucune campagne trouvée",
+    "campaignNotFound": "Campagne introuvable"
+  },
+  "dashboard": {
+    "title": "Tableau de Bord",
+    "overview": "Vue d'ensemble",
+    "myCampaigns": "Mes Campagnes",
+    "backedCampaigns": "Campagnes Soutenues",
+    "analytics": "Analyses",
+    "settings": "Paramètres",
+    "totalRaised": "Total Collecté",
+    "totalBacked": "Total Soutenu",
+    "activeCampaigns": "Campagnes Actives",
+    "campaignsBacked": "Campagnes Soutenues"
+  },
+  "wallet": {
+    "connect": "Connecter le Portefeuille",
+    "disconnect": "Déconnecter",
+    "connected": "Connecté",
+    "notConnected": "Non Connecté",
+    "connecting": "Connexion...",
+    "walletAddress": "Adresse du Portefeuille",
+    "balance": "Solde",
+    "network": "Réseau"
+  },
+  "errors": {
+    "invalidCredentials": "Identifiants invalides",
+    "userAlreadyExists": "L'utilisateur existe déjà",
+    "campaignNotFound": "Campagne introuvable",
+    "networkError": "Erreur réseau. Veuillez réessayer.",
+    "unauthorized": "Non autorisé. Veuillez vous connecter.",
+    "forbidden": "Vous n'avez pas la permission d'effectuer cette action.",
+    "serverError": "Erreur du serveur. Veuillez réessayer plus tard.",
+    "validationError": "Veuillez vérifier votre saisie et réessayer."
+  },
+  "messages": {
+    "loginSuccess": "Connexion réussie",
+    "logoutSuccess": "Déconnexion réussie",
+    "registerSuccess": "Compte créé avec succès",
+    "campaignCreated": "Campagne créée avec succès",
+    "campaignUpdated": "Campagne mise à jour avec succès",
+    "campaignDeleted": "Campagne supprimée avec succès",
+    "fundingSuccess": "Financement réussi ! Merci pour votre soutien."
+  },
+  "home": {
+    "nav": {
+      "campaigns": "Campagnes",
+      "startCampaign": "Lancer une Campagne",
+      "about": "À propos",
+      "launchCampaign": "Lancer une Campagne"
+    },
+    "hero": {
+      "badge": "Propulsé par Web3 et l'IA",
+      "title": "Le crowdfunding sans intermédiaire",
+      "subtitle": "Lancez votre projet sur la blockchain avec des analyses alimentées par l'IA. Financement transparent, paiements instantanés et contrôle total de votre campagne grâce aux smart contracts.",
+      "exploreCampaigns": "Explorer les Campagnes",
+      "startYourCampaign": "Lancer Votre Campagne",
+      "totalRaised": "Total Collecté",
+      "successfulFundings": "Financements Réussis",
+      "activeBackers": "Contributeurs Actifs",
+      "liveUpdates": "Mises à jour en direct",
+      "syncing": "Synchronisation…"
+    },
+    "trust": {
+      "projects": "{count}+ Projets",
+      "backers": "{count}+ Contributeurs",
+      "activeCampaigns": "{count} Campagnes Actives",
+      "secure": "Sécurisé et Fiable"
+    },
+    "features": {
+      "title": "Pourquoi choisir le crowdfunding décentralisé ?",
+      "subtitle": "Construit sur la technologie blockchain avec des fonctionnalités IA pour la transparence, la sécurité et l'accessibilité mondiale.",
+      "blockchainSecurity": "Sécurité Blockchain",
+      "blockchainSecurityDesc": "Toutes les transactions sont enregistrées sur la blockchain. Les smart contracts garantissent que les fonds ne sont libérés que lorsque les jalons sont atteints.",
+      "aiAssistance": "Assistance IA",
+      "aiAssistanceDesc": "Obtenez une analyse intelligente de campagne, une génération de contenu et des recommandations personnalisées alimentées par une IA avancée.",
+      "globalReach": "Portée Mondiale",
+      "globalReachDesc": "Atteignez des contributeurs dans le monde entier sans restrictions géographiques. Acceptez des financements en plusieurs cryptomonnaies.",
+      "instantPayouts": "Paiements Instantanés",
+      "instantPayoutsDesc": "Pas d'attente pour le traitement des paiements. Les fonds sont automatiquement distribués lorsque les objectifs de campagne sont atteints.",
+      "learnMore": "En savoir plus →"
+    },
+    "featured": {
+      "title": "Campagnes en Vedette",
+      "subtitle": "Découvrez des projets innovants en quête de financement",
+      "viewAll": "Voir Toutes les Campagnes",
+      "daysLeft": "{count} jours restants",
+      "by": "par {name}",
+      "anonymous": "Anonyme",
+      "progress": "Progression",
+      "backers": "{count} contributeurs",
+      "funded": "{percent}% financé",
+      "viewCampaign": "Voir la Campagne"
+    },
+    "recommendations": {
+      "title": "Recommandé pour Vous",
+      "subtitle": "Recommandations de campagnes alimentées par l'IA selon vos intérêts et votre historique de soutien",
+      "poweredByAi": "Propulsé par l'IA"
+    },
+    "footer": {
+      "description": "Plateforme de crowdfunding décentralisé construite sur la technologie blockchain avec des fonctionnalités IA.",
+      "platform": "Plateforme",
+      "browseCampaigns": "Parcourir les Campagnes",
+      "howItWorks": "Comment ça Marche",
+      "resources": "Ressources",
+      "documentation": "Documentation",
+      "support": "Support",
+      "blog": "Blog",
+      "company": "Entreprise",
+      "careers": "Carrières",
+      "contact": "Contact",
+      "copyright": "© 2025 FundFlow. Tous droits réservés."
+    }
+  }
+}

@@ -1,0 +1,166 @@
+{
+  "common": {
+    "welcome": "Welcome to FundFlow",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "update": "Update",
+    "search": "Search",
+    "filter": "Filter",
+    "close": "Close",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "auth": {
+    "login": "Login",
+    "logout": "Logout",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "forgotPassword": "Forgot Password?",
+    "rememberMe": "Remember me",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "createAccount": "Create Account",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "campaigns": {
+    "title": "Campaigns",
+    "create": "Create Campaign",
+    "myCampaigns": "My Campaigns",
+    "featured": "Featured Campaigns",
+    "allCampaigns": "All Campaigns",
+    "searchCampaigns": "Search campaigns...",
+    "goal": "Goal",
+    "raised": "Raised",
+    "backers": "Backers",
+    "daysLeft": "days left",
+    "fundCampaign": "Fund Campaign",
+    "viewDetails": "View Details",
+    "noCampaigns": "No campaigns found",
+    "campaignNotFound": "Campaign not found"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview",
+    "myCampaigns": "My Campaigns",
+    "backedCampaigns": "Backed Campaigns",
+    "analytics": "Analytics",
+    "settings": "Settings",
+    "totalRaised": "Total Raised",
+    "totalBacked": "Total Backed",
+    "activeCampaigns": "Active Campaigns",
+    "campaignsBacked": "Campaigns Backed"
+  },
+  "wallet": {
+    "connect": "Connect Wallet",
+    "disconnect": "Disconnect",
+    "connected": "Connected",
+    "notConnected": "Not Connected",
+    "connecting": "Connecting...",
+    "walletAddress": "Wallet Address",
+    "balance": "Balance",
+    "network": "Network"
+  },
+  "errors": {
+    "invalidCredentials": "Invalid credentials",
+    "userAlreadyExists": "User already exists",
+    "campaignNotFound": "Campaign not found",
+    "networkError": "Network error. Please try again.",
+    "unauthorized": "Unauthorized. Please log in.",
+    "forbidden": "You don't have permission to perform this action.",
+    "serverError": "Server error. Please try again later.",
+    "validationError": "Please check your input and try again."
+  },
+  "messages": {
+    "loginSuccess": "Logged in successfully",
+    "logoutSuccess": "Logged out successfully",
+    "registerSuccess": "Account created successfully",
+    "campaignCreated": "Campaign created successfully",
+    "campaignUpdated": "Campaign updated successfully",
+    "campaignDeleted": "Campaign deleted successfully",
+    "fundingSuccess": "Funding successful! Thank you for your support."
+  },
+  "home": {
+    "nav": {
+      "campaigns": "Campaigns",
+      "startCampaign": "Start Campaign",
+      "about": "About",
+      "launchCampaign": "Launch Campaign"
+    },
+    "hero": {
+      "badge": "Powered by Web3 & AI Technology",
+      "title": "Crowdfunding without the middleman",
+      "subtitle": "Launch your project on the blockchain with AI-powered insights. Transparent funding, instant payouts, and complete control over your campaign with smart contracts.",
+      "exploreCampaigns": "Explore Campaigns",
+      "startYourCampaign": "Start Your Campaign",
+      "totalRaised": "Total Raised",
+      "successfulFundings": "Successful Fundings",
+      "activeBackers": "Active Backers",
+      "liveUpdates": "Live updates",
+      "syncing": "Syncing data…"
+    },
+    "trust": {
+      "projects": "{count}+ Projects",
+      "backers": "{count}+ Backers",
+      "activeCampaigns": "{count} Active Campaigns",
+      "secure": "Secure & Reliable"
+    },
+    "features": {
+      "title": "Why choose decentralized crowdfunding?",
+      "subtitle": "Built on blockchain technology with AI-powered features for transparency, security, and global accessibility.",
+      "blockchainSecurity": "Blockchain Security",
+      "blockchainSecurityDesc": "All transactions are recorded on the blockchain. Smart contracts ensure funds are released only when milestones are met.",
+      "aiAssistance": "AI Assistance",
+      "aiAssistanceDesc": "Get intelligent campaign analysis, content generation, and personalized recommendations powered by advanced AI.",
+      "globalReach": "Global Reach",
+      "globalReachDesc": "Reach backers worldwide without geographical restrictions. Accept funding in multiple cryptocurrencies.",
+      "instantPayouts": "Instant Payouts",
+      "instantPayoutsDesc": "No waiting for payment processing. Funds are automatically distributed when campaign goals are achieved.",
+      "learnMore": "Learn more →"
+    },
+    "featured": {
+      "title": "Featured Campaigns",
+      "subtitle": "Discover innovative projects seeking funding",
+      "viewAll": "View All Campaigns",
+      "daysLeft": "{count} days left",
+      "by": "by {name}",
+      "anonymous": "Anonymous",
+      "progress": "Progress",
+      "backers": "{count} backers",
+      "funded": "{percent}% funded",
+      "viewCampaign": "View Campaign"
+    },
+    "recommendations": {
+      "title": "Recommended for You",
+      "subtitle": "AI-powered campaign recommendations based on your interests and backing history",
+      "poweredByAi": "Powered by AI"
+    },
+    "footer": {
+      "description": "Decentralized crowdfunding platform built on blockchain technology with AI-powered features.",
+      "platform": "Platform",
+      "browseCampaigns": "Browse Campaigns",
+      "howItWorks": "How It Works",
+      "resources": "Resources",
+      "documentation": "Documentation",
+      "support": "Support",
+      "blog": "Blog",
+      "company": "Company",
+      "careers": "Careers",
+      "contact": "Contact",
+      "copyright": "© 2025 FundFlow. All rights reserved."
+    }
+  }
+}

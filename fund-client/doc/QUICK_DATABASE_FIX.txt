@@ -1,0 +1,91 @@
+╔════════════════════════════════════════════════════════════════╗
+║         🗄️  FIX DATABASE ERROR - 3 SIMPLE STEPS               ║
+╚════════════════════════════════════════════════════════════════╝
+
+ERROR YOU'RE SEEING:
+  "password authentication failed for user 'postgres'"
+
+WHY:
+  Your backend needs PostgreSQL database, but it's not running.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ QUICK FIX (3 minutes):
+
+STEP 1: Start Docker Desktop
+───────────────────────────────────────
+  1. Press Cmd+Space
+  2. Type: Docker
+  3. Press Enter
+  4. Wait until whale icon is steady (top menu bar)
+
+STEP 2: Run Setup Script
+───────────────────────────────────────
+  cd backend
+  ./setup-database.sh
+
+STEP 3: Restart Backend
+───────────────────────────────────────
+  1. Stop current backend (Ctrl+C in terminal)
+  2. Run: npm run start:dev
+  3. ✅ No more database errors!
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 MANUAL METHOD (if script doesn't work):
+
+  cd backend
+  
+  # Start database
+  docker compose up -d postgres
+  
+  # Wait 10 seconds
+  sleep 10
+  
+  # Create .env file
+  cat > .env << 'EOF'
+  DB_HOST=localhost
+  DB_PORT=5432
+  DB_USERNAME=postgres
+  DB_PASSWORD=password
+  DB_NAME=crowdfunding
+  JWT_SECRET=your-super-secret-jwt-key
+  PORT=3001
+  NODE_ENV=development
+  EOF
+  
+  # Restart backend
+  npm run start:dev
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔍 VERIFY IT WORKS:
+
+  ✓ Backend should show:
+    "LOG [TypeOrmModule] dependencies initialized"
+  
+  ✗ Should NOT show:
+    "password authentication failed"
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📝 YOUR SETUP AFTER FIX:
+
+  Terminal 1: Frontend → http://localhost:3000 ✅
+  Terminal 2: Backend  → http://localhost:3001 ✅ (fixed!)
+  Docker:     Database → localhost:5432       ✅
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+💡 TIPS:
+
+  • Keep Docker Desktop running while developing
+  • To stop database: docker compose down
+  • To view logs: docker logs crowdfunding-postgres
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📚 DETAILED GUIDE: See DATABASE_SETUP.md
+
+════════════════════════════════════════════════════════════════
+

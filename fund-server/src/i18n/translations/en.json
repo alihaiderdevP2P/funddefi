@@ -1,0 +1,43 @@
+{
+  "auth": {
+    "invalid_credentials": "Invalid credentials",
+    "user_already_exists": "User already exists",
+    "already_logged_in": "User is already logged in. Please logout from other devices first.",
+    "session_invalidated": "Previous session has been invalidated",
+    "session_created": "New session created"
+  },
+  "users": {
+    "not_found": "User with ID {id} not found",
+    "only_superadmin_create_admin": "Only superadmin can create admin accounts",
+    "max_superadmins": "Maximum of 3 superadmin accounts allowed. Cannot create more.",
+    "max_superadmins_promote": "Maximum of 3 superadmin accounts allowed. Cannot promote user to superadmin.",
+    "only_superadmin_change_role": "Only superadmin can change user roles",
+    "only_superadmin_list": "Only superadmin can list admin users",
+    "role_update_forbidden": "Cannot update role through regular update. Use updateRole() method instead."
+  },
+  "campaigns": {
+    "invalid_uuid": "Invalid campaign ID format. Expected UUID, got: {id}. Campaign IDs must be in UUID format (e.g., 550e8400-e29b-41d4-a716-446655440001).",
+    "not_found": "Campaign with ID {id} not found",
+    "update_own_only": "You can only update your own campaigns",
+    "delete_own_only": "You can only delete your own campaigns",
+    "not_active": "Campaign is not active",
+    "already_ended": "Campaign has already ended",
+    "goal_reached": "Campaign has already reached its funding goal",
+    "reward_not_found": "Reward with ID {id} not found",
+    "invalid_amount": "Invalid reward amount. Must be greater than 0.",
+    "add_reward_forbidden": "You can only add rewards to your own campaigns"
+  },
+  "funding": {
+    "not_found": "Funding with ID {id} not found",
+    "campaign_not_active": "Campaign is not active",
+    "campaign_ended": "Campaign has ended",
+    "invalid_amount": "Invalid funding amount. Must be greater than 0."
+  },
+  "common": {
+    "server_error": "Internal server error",
+    "bad_request": "Bad request",
+    "unauthorized": "Unauthorized",
+    "forbidden": "Forbidden",
+    "not_found": "Resource not found"
+  }
+}

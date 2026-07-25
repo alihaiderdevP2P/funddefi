@@ -1,0 +1,43 @@
+{
+  "auth": {
+    "invalid_credentials": "Credenciales inválidas",
+    "user_already_exists": "El usuario ya existe",
+    "already_logged_in": "El usuario ya está conectado. Por favor, cierre sesión en otros dispositivos primero.",
+    "session_invalidated": "La sesión anterior ha sido invalidada",
+    "session_created": "Nueva sesión creada"
+  },
+  "users": {
+    "not_found": "Usuario con ID {id} no encontrado",
+    "only_superadmin_create_admin": "Solo el superadministrador puede crear cuentas de administrador",
+    "max_superadmins": "Se permite un máximo de 3 cuentas de superadministrador. No se pueden crear más.",
+    "max_superadmins_promote": "Se permite un máximo de 3 cuentas de superadministrador. No se puede promover usuario a superadministrador.",
+    "only_superadmin_change_role": "Solo el superadministrador puede cambiar los roles de usuario",
+    "only_superadmin_list": "Solo el superadministrador puede listar usuarios administradores",
+    "role_update_forbidden": "No se puede actualizar el rol mediante actualización regular. Use el método updateRole() en su lugar."
+  },
+  "campaigns": {
+    "invalid_uuid": "Formato de ID de campaña inválido. Se esperaba UUID, se obtuvo: {id}. Los IDs de campaña deben estar en formato UUID (por ejemplo, 550e8400-e29b-41d4-a716-446655440001).",
+    "not_found": "Campaña con ID {id} no encontrada",
+    "update_own_only": "Solo puedes actualizar tus propias campañas",
+    "delete_own_only": "Solo puedes eliminar tus propias campañas",
+    "not_active": "La campaña no está activa",
+    "already_ended": "La campaña ya ha terminado",
+    "goal_reached": "La campaña ya ha alcanzado su objetivo de financiación",
+    "reward_not_found": "Recompensa con ID {id} no encontrada",
+    "invalid_amount": "Cantidad de recompensa inválida. Debe ser mayor que 0.",
+    "add_reward_forbidden": "Solo puedes agregar recompensas a tus propias campañas"
+  },
+  "funding": {
+    "not_found": "Financiación con ID {id} no encontrada",
+    "campaign_not_active": "La campaña no está activa",
+    "campaign_ended": "La campaña ha terminado",
+    "invalid_amount": "Cantidad de financiación inválida. Debe ser mayor que 0."
+  },
+  "common": {
+    "server_error": "Error interno del servidor",
+    "bad_request": "Solicitud incorrecta",
+    "unauthorized": "No autorizado",
+    "forbidden": "Prohibido",
+    "not_found": "Recurso no encontrado"
+  }
+}

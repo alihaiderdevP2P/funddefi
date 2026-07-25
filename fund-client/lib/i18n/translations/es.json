@@ -1,0 +1,166 @@
+{
+  "common": {
+    "welcome": "Bienvenido a FundFlow",
+    "loading": "Cargando...",
+    "error": "Error",
+    "success": "Éxito",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "create": "Crear",
+    "update": "Actualizar",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "close": "Cerrar",
+    "back": "Atrás",
+    "next": "Siguiente",
+    "previous": "Anterior",
+    "submit": "Enviar",
+    "confirm": "Confirmar",
+    "yes": "Sí",
+    "no": "No"
+  },
+  "auth": {
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión",
+    "register": "Registrarse",
+    "email": "Correo Electrónico",
+    "password": "Contraseña",
+    "name": "Nombre",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "rememberMe": "Recuérdame",
+    "alreadyHaveAccount": "¿Ya tienes una cuenta?",
+    "dontHaveAccount": "¿No tienes una cuenta?",
+    "createAccount": "Crear Cuenta",
+    "signIn": "Iniciar Sesión",
+    "signUp": "Registrarse"
+  },
+  "campaigns": {
+    "title": "Campañas",
+    "create": "Crear Campaña",
+    "myCampaigns": "Mis Campañas",
+    "featured": "Campañas Destacadas",
+    "allCampaigns": "Todas las Campañas",
+    "searchCampaigns": "Buscar campañas...",
+    "goal": "Meta",
+    "raised": "Recaudado",
+    "backers": "Patrocinadores",
+    "daysLeft": "días restantes",
+    "fundCampaign": "Financiar Campaña",
+    "viewDetails": "Ver Detalles",
+    "noCampaigns": "No se encontraron campañas",
+    "campaignNotFound": "Campaña no encontrada"
+  },
+  "dashboard": {
+    "title": "Panel de Control",
+    "overview": "Resumen",
+    "myCampaigns": "Mis Campañas",
+    "backedCampaigns": "Campañas Patrocinadas",
+    "analytics": "Analíticas",
+    "settings": "Configuración",
+    "totalRaised": "Total Recaudado",
+    "totalBacked": "Total Patrocinado",
+    "activeCampaigns": "Campañas Activas",
+    "campaignsBacked": "Campañas Patrocinadas"
+  },
+  "wallet": {
+    "connect": "Conectar Billetera",
+    "disconnect": "Desconectar",
+    "connected": "Conectado",
+    "notConnected": "No Conectado",
+    "connecting": "Conectando...",
+    "walletAddress": "Dirección de Billetera",
+    "balance": "Balance",
+    "network": "Red"
+  },
+  "errors": {
+    "invalidCredentials": "Credenciales inválidas",
+    "userAlreadyExists": "El usuario ya existe",
+    "campaignNotFound": "Campaña no encontrada",
+    "networkError": "Error de red. Por favor intenta de nuevo.",
+    "unauthorized": "No autorizado. Por favor inicia sesión.",
+    "forbidden": "No tienes permiso para realizar esta acción.",
+    "serverError": "Error del servidor. Por favor intenta más tarde.",
+    "validationError": "Por favor verifica tu entrada e intenta de nuevo."
+  },
+  "messages": {
+    "loginSuccess": "Sesión iniciada exitosamente",
+    "logoutSuccess": "Sesión cerrada exitosamente",
+    "registerSuccess": "Cuenta creada exitosamente",
+    "campaignCreated": "Campaña creada exitosamente",
+    "campaignUpdated": "Campaña actualizada exitosamente",
+    "campaignDeleted": "Campaña eliminada exitosamente",
+    "fundingSuccess": "¡Financiación exitosa! Gracias por tu apoyo."
+  },
+  "home": {
+    "nav": {
+      "campaigns": "Campañas",
+      "startCampaign": "Iniciar Campaña",
+      "about": "Acerca de",
+      "launchCampaign": "Lanzar Campaña"
+    },
+    "hero": {
+      "badge": "Impulsado por Web3 e IA",
+      "title": "Crowdfunding sin intermediarios",
+      "subtitle": "Lanza tu proyecto en blockchain con información impulsada por IA. Financiación transparente, pagos instantáneos y control total sobre tu campaña con contratos inteligentes.",
+      "exploreCampaigns": "Explorar Campañas",
+      "startYourCampaign": "Inicia Tu Campaña",
+      "totalRaised": "Total Recaudado",
+      "successfulFundings": "Financiaciones Exitosas",
+      "activeBackers": "Patrocinadores Activos",
+      "liveUpdates": "Actualizaciones en vivo",
+      "syncing": "Sincronizando datos…"
+    },
+    "trust": {
+      "projects": "{count}+ Proyectos",
+      "backers": "{count}+ Patrocinadores",
+      "activeCampaigns": "{count} Campañas Activas",
+      "secure": "Seguro y Confiable"
+    },
+    "features": {
+      "title": "¿Por qué elegir crowdfunding descentralizado?",
+      "subtitle": "Construido sobre tecnología blockchain con funciones de IA para transparencia, seguridad y accesibilidad global.",
+      "blockchainSecurity": "Seguridad Blockchain",
+      "blockchainSecurityDesc": "Todas las transacciones se registran en la blockchain. Los contratos inteligentes garantizan que los fondos se liberen solo cuando se cumplan los hitos.",
+      "aiAssistance": "Asistencia con IA",
+      "aiAssistanceDesc": "Obtén análisis inteligente de campañas, generación de contenido y recomendaciones personalizadas impulsadas por IA avanzada.",
+      "globalReach": "Alcance Global",
+      "globalReachDesc": "Alcanza patrocinadores en todo el mundo sin restricciones geográficas. Acepta financiación en múltiples criptomonedas.",
+      "instantPayouts": "Pagos Instantáneos",
+      "instantPayoutsDesc": "Sin esperas por procesamiento de pagos. Los fondos se distribuyen automáticamente cuando se alcanzan los objetivos de la campaña.",
+      "learnMore": "Saber más →"
+    },
+    "featured": {
+      "title": "Campañas Destacadas",
+      "subtitle": "Descubre proyectos innovadores que buscan financiación",
+      "viewAll": "Ver Todas las Campañas",
+      "daysLeft": "{count} días restantes",
+      "by": "por {name}",
+      "anonymous": "Anónimo",
+      "progress": "Progreso",
+      "backers": "{count} patrocinadores",
+      "funded": "{percent}% financiado",
+      "viewCampaign": "Ver Campaña"
+    },
+    "recommendations": {
+      "title": "Recomendado para Ti",
+      "subtitle": "Recomendaciones de campañas impulsadas por IA según tus intereses e historial de apoyo",
+      "poweredByAi": "Impulsado por IA"
+    },
+    "footer": {
+      "description": "Plataforma de crowdfunding descentralizado construida sobre tecnología blockchain con funciones de IA.",
+      "platform": "Plataforma",
+      "browseCampaigns": "Explorar Campañas",
+      "howItWorks": "Cómo Funciona",
+      "resources": "Recursos",
+      "documentation": "Documentación",
+      "support": "Soporte",
+      "blog": "Blog",
+      "company": "Empresa",
+      "careers": "Carreras",
+      "contact": "Contacto",
+      "copyright": "© 2025 FundFlow. Todos los derechos reservados."
+    }
+  }
+}

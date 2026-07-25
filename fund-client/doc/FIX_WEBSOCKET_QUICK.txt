@@ -1,0 +1,57 @@
+╔════════════════════════════════════════════════════════════════╗
+║     🔧 FIX WebSocket Errors - ONE COMMAND                      ║
+╚════════════════════════════════════════════════════════════════╝
+
+❌ YOUR ERROR:
+  WebSocket connection error
+  Max reconnection attempts reached
+
+🎯 CAUSE:
+  Backend server is NOT running (it needs port 3001)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ ONE-COMMAND FIX:
+
+  ./COMPLETE_FIX_ALL.sh
+
+  This will:
+  1. Stop old Next.js servers
+  2. Stop PostgreSQL 17  
+  3. Start Docker PostgreSQL
+  4. Start backend in new terminal
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📋 OR MANUAL FIX (4 commands):
+
+  1. Kill old processes (will ask for password):
+     kill -9 7983 && sudo kill -9 264
+
+  2. Start Docker database:
+     cd backend && docker compose up -d postgres && sleep 10
+
+  3. Open NEW terminal and start backend:
+     cd backend && npm run start:dev
+
+  4. Reload your browser page
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ AFTER RUNNING:
+
+  Browser console should show:
+  ✅ Connected to WebSocket server
+
+  No more errors:
+  ❌ WebSocket connection error (GONE!)
+  ❌ 404 errors (GONE!)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🚀 READY? RUN:
+
+  ./COMPLETE_FIX_ALL.sh
+
+════════════════════════════════════════════════════════════════
+
