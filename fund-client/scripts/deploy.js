@@ -1,26 +1,21 @@
-const { ethers } = require("hardhat")
+const { ethers, network } = require("hardhat")
 
 async function main() {
   console.log("Deploying CrowdfundingFactory contract...")
 
-  // Get the contract factory
   const CrowdfundingFactory = await ethers.getContractFactory("CrowdfundingFactory")
-
-  // Deploy the contract
   const crowdfundingFactory = await CrowdfundingFactory.deploy()
 
-  // Wait for deployment to complete
-  await crowdfundingFactory.waitForDeployment()
+  // ethers v5 API (project uses ethers@5.7.2)
+  await crowdfundingFactory.deployed()
 
-  const address = await crowdfundingFactory.getAddress()
+  const address = crowdfundingFactory.address
   console.log("CrowdfundingFactory deployed to:", address)
 
-  // Verify deployment
   console.log("Verifying deployment...")
   const campaignCount = await crowdfundingFactory.getCampaignCount()
   console.log("Initial campaign count:", campaignCount.toString())
 
-  // Save deployment info
   const deploymentInfo = {
     contractAddress: address,
     network: network.name,
@@ -34,7 +29,6 @@ async function main() {
   return deploymentInfo
 }
 
-// Handle deployment errors
 main()
   .then(() => process.exit(0))
   .catch((error) => {

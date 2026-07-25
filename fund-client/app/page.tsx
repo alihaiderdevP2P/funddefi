@@ -10,10 +10,8 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { WalletConnect } from "@/components/wallet-connect";
 import {
   ArrowRight,
-  TrendingUp,
   Users,
   Shield,
   Zap,
@@ -27,9 +25,8 @@ import { StartCampaignCTA } from "@/components/start-campaign-cta";
 import { AICampaignRecommendations } from "@/components/ai-campaign-recommendations";
 import { AIChatAssistant } from "@/components/ai-chat-assistant";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { UserNavigation } from "@/components/user-navigation";
-import { LanguageSwitcher } from "@/components/language-switcher";
+import { SiteHeader } from "@/components/site-header";
+import { SiteFooter } from "@/components/site-footer";
 import { useI18n } from "@/hooks/use-i18n";
 import {
   HeroBackgroundSlider,
@@ -47,54 +44,11 @@ export default function HomePage() {
   const { slideIndex, goToSlide } = useHeroSlider(HERO_SLIDES.length);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl text-foreground">FundFlow</span>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/campaigns"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("home.nav.campaigns")}
-            </Link>
-            <Link
-              href="/create"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("home.nav.startCampaign")}
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              {t("home.nav.about")}
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <LanguageSwitcher />
-            <ThemeToggle />
-            <WalletConnect />
-            <UserNavigation />
-            {!isAuthenticated && (
-              <Button size="sm" asChild>
-                <Link href="/create">{t("home.nav.launchCampaign")}</Link>
-              </Button>
-            )}
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <SiteHeader />
 
       {/* Hero Section */}
-      <section className="relative overflow-hidden py-20 lg:py-32 min-h-[min(85vh,720px)] flex items-center">
+      <section className="relative overflow-hidden py-16 sm:py-20 lg:py-32 min-h-[min(85vh,720px)] flex items-center">
         <HeroBackgroundSlider slideIndex={slideIndex} />
         <div className="container relative z-10 mx-auto px-4 text-center">
           <div className="max-w-4xl mx-auto">
@@ -106,16 +60,16 @@ export default function HomePage() {
               {t("home.hero.badge")}
             </Badge>
 
-            <h1 className="text-4xl lg:text-6xl font-bold text-white mb-6 text-balance drop-shadow-sm">
+            <h1 className="text-3xl sm:text-4xl lg:text-6xl font-bold text-white mb-6 text-balance drop-shadow-sm">
               {t("home.hero.title")}
             </h1>
 
-            <p className="text-xl text-white/80 mb-8 text-pretty max-w-2xl mx-auto">
+            <p className="text-base sm:text-xl text-white/80 mb-8 text-pretty max-w-2xl mx-auto">
               {t("home.hero.subtitle")}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="text-lg px-8 shadow-lg" asChild>
+              <Button size="lg" className="text-base sm:text-lg px-6 sm:px-8 shadow-lg" asChild>
                 <Link href="/campaigns">
                   {t("home.hero.exploreCampaigns")}
                   <ArrowRight className="w-5 h-5 ml-2" />
@@ -158,7 +112,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-8">
             <Card
               className="text-center hover:shadow-lg transition-all duration-300 cursor-pointer group"
               onClick={() =>
@@ -429,126 +383,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-background border-t border-border py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="font-bold text-xl text-foreground">
-                  FundFlow
-                </span>
-              </div>
-              <p className="text-muted-foreground">
-                {t("home.footer.description")}
-              </p>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">
-                {t("home.footer.platform")}
-              </h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link
-                    href="/campaigns"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.browseCampaigns")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/create"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.nav.startCampaign")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/how-it-works"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.howItWorks")}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">
-                {t("home.footer.resources")}
-              </h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link
-                    href="/docs"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.documentation")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/support"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.support")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/blog"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.blog")}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">
-                {t("home.footer.company")}
-              </h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.nav.about")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/careers"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.careers")}
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    {t("home.footer.contact")}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>{t("home.footer.copyright")}</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
 
       {/* AI Chat Assistant */}
       <AIChatAssistant />

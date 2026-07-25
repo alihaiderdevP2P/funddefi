@@ -1,5 +1,9 @@
 "use client";
 
+import { SiteFooter } from "@/components/site-footer";
+
+import { SiteHeader } from "@/components/site-header";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -211,48 +215,9 @@ const stats = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <Play className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl text-foreground">FundFlow</span>
-          </Link>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/campaigns"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Campaigns
-            </Link>
-            <Link
-              href="/create"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Start Campaign
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              About
-            </Link>
-            <Link href="/how-it-works" className="text-foreground font-medium">
-              How It Works
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/create">Start Campaign</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       {/* Hero Section */}
       <section className="py-20 bg-muted/30">
@@ -568,116 +533,7 @@ export default function HowItWorksPage() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-background border-t border-border py-12">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Play className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="font-bold text-xl text-foreground">
-                  FundFlow
-                </span>
-              </div>
-              <p className="text-muted-foreground mb-4">
-                Building the future of crowdfunding with blockchain technology.
-              </p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Platform</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link
-                    href="/campaigns"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Browse Campaigns
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/create"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Start Campaign
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/how-it-works"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    How It Works
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Company</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link
-                    href="/about"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    About
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/careers"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Careers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/contact"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Resources</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>
-                  <Link
-                    href="/docs"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/support"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Support
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/blog"
-                    className="hover:text-foreground transition-colors"
-                  >
-                    Blog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>© 2024 FundFlow. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

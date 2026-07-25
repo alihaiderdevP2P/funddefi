@@ -128,7 +128,7 @@ export function AIChatAssistant({ className = "" }: AIChatAssistantProps) {
 
   if (!isOpen) {
     return (
-      <div className={`fixed bottom-6 right-6 z-50 ${className}`}>
+      <div className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 ${className}`}>
         <Button
           onClick={() => setIsOpen(true)}
           size="lg"
@@ -145,7 +145,9 @@ export function AIChatAssistant({ className = "" }: AIChatAssistantProps) {
   }
 
   return (
-    <div className={`fixed bottom-6 right-6 z-50 w-96 ${className}`}>
+    <div
+      className={`fixed bottom-4 right-4 sm:bottom-6 sm:right-6 z-50 w-[calc(100vw-2rem)] max-w-sm sm:w-96 ${className}`}
+    >
       <Card className="shadow-2xl border-2">
         <CardHeader className="pb-3">
           <div className="flex items-center justify-between">

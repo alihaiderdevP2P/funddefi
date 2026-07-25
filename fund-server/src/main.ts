@@ -47,7 +47,10 @@ async function bootstrap() {
   const app = await createApp();
   const port = Number(process.env.PORT) || 3001;
   await app.listen(port, "0.0.0.0");
+  const baseUrl = `http://localhost:${port}`;
   console.log(`Application listening on port ${port}`);
+  console.log(`API:     ${baseUrl}/api`);
+  console.log(`Swagger: ${baseUrl}/docs`);
 }
 
 bootstrap();

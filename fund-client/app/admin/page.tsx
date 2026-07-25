@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useState, useEffect, useCallback } from "react";
 import {
   Card,
@@ -7,23 +9,17 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  Shield,
   Users,
   DollarSign,
   AlertTriangle,
-  Settings,
   BarChart3,
-  Loader2,
   BookOpen,
   Briefcase,
   HeadphonesIcon,
   Mail,
 } from "lucide-react";
-import Link from "next/link";
 import { useAuth } from "@/hooks/use-auth";
 import { RoleAuthGuard } from "@/components/role-auth-guard";
 import { adminAPI, formatEth, type PlatformStats } from "@/lib/admin-api";
@@ -89,51 +85,12 @@ export default function AdminPage() {
       title="Admin Access Required"
       description="This area is restricted to administrators only"
     >
-      <div className="min-h-screen bg-background">
-        <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <div className="flex items-center space-x-2">
-              <Shield className="w-8 h-8 text-primary" />
-              <span className="font-bold text-xl text-foreground">
-                Admin Dashboard
-              </span>
-            </div>
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        <SiteHeader variant="admin" showWallet={false} />
 
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link
-                href="/dashboard"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                User Dashboard
-              </Link>
-              <Link
-                href="/campaigns"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Public View
-              </Link>
-            </nav>
-
-            <div className="flex items-center space-x-4">
-              {statsLoading ? (
-                <Loader2 className="w-4 h-4 animate-spin" />
-              ) : (
-                <Badge variant="destructive" className="animate-pulse">
-                  {stats.pendingApprovals + stats.flaggedCampaigns} Pending
-                </Badge>
-              )}
-              <Button variant="outline" size="sm" asChild>
-                <Link href="/settings">
-                  <Settings className="w-4 h-4" />
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-6 sm:py-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-foreground mb-2">
+            <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
               Platform Administration
             </h1>
             <p className="text-muted-foreground">
@@ -141,7 +98,7 @@ export default function AdminPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
             <Card>
               <CardHeader className="pb-2">
                 <CardTitle className="text-sm font-medium text-muted-foreground flex items-center">
@@ -216,29 +173,41 @@ export default function AdminPage() {
           </div>
 
           <Tabs value={activeTab} onValueChange={setActiveTab}>
-            <TabsList className="grid w-full grid-cols-9 lg:w-auto lg:grid-cols-9">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
-              <TabsTrigger value="blog">
-                <BookOpen className="w-4 h-4 mr-1 hidden sm:inline" />
-                Blog
-              </TabsTrigger>
-              <TabsTrigger value="careers">
-                <Briefcase className="w-4 h-4 mr-1 hidden sm:inline" />
-                Careers
-              </TabsTrigger>
-              <TabsTrigger value="support">
-                <HeadphonesIcon className="w-4 h-4 mr-1 hidden sm:inline" />
-                Support
-              </TabsTrigger>
-              <TabsTrigger value="contact">
-                <Mail className="w-4 h-4 mr-1 hidden sm:inline" />
-                Contact
-              </TabsTrigger>
-              <TabsTrigger value="users">Users</TabsTrigger>
-              <TabsTrigger value="moderation">Moderation</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            </TabsList>
+            <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0 pb-1">
+              <TabsList className="inline-flex w-max h-auto flex-nowrap gap-1 p-1">
+                <TabsTrigger value="overview" className="shrink-0">
+                  Overview
+                </TabsTrigger>
+                <TabsTrigger value="campaigns" className="shrink-0">
+                  Campaigns
+                </TabsTrigger>
+                <TabsTrigger value="blog" className="shrink-0">
+                  <BookOpen className="w-4 h-4 mr-1 hidden sm:inline" />
+                  Blog
+                </TabsTrigger>
+                <TabsTrigger value="careers" className="shrink-0">
+                  <Briefcase className="w-4 h-4 mr-1 hidden sm:inline" />
+                  Careers
+                </TabsTrigger>
+                <TabsTrigger value="support" className="shrink-0">
+                  <HeadphonesIcon className="w-4 h-4 mr-1 hidden sm:inline" />
+                  Support
+                </TabsTrigger>
+                <TabsTrigger value="contact" className="shrink-0">
+                  <Mail className="w-4 h-4 mr-1 hidden sm:inline" />
+                  Contact
+                </TabsTrigger>
+                <TabsTrigger value="users" className="shrink-0">
+                  Users
+                </TabsTrigger>
+                <TabsTrigger value="moderation" className="shrink-0">
+                  Moderation
+                </TabsTrigger>
+                <TabsTrigger value="analytics" className="shrink-0">
+                  Analytics
+                </TabsTrigger>
+              </TabsList>
+            </div>
 
             <TabsContent value="overview" className="mt-6">
               <AdminOverviewTab />

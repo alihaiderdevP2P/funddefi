@@ -1,11 +1,12 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { WalletConnect } from "@/components/wallet-connect";
-import { ArrowLeft, TrendingUp, MapPin } from "lucide-react";
+import { ArrowLeft, MapPin } from "lucide-react";
 import Link from "next/link";
 import { useCampaign } from "@/hooks/use-campaigns";
 import { useFunding } from "@/hooks/use-funding";
@@ -42,7 +43,8 @@ export default function CampaignDetailPage({
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        <SiteHeader />
         <div className="container mx-auto px-4 py-8">
           <div className="animate-pulse">
             <div className="h-8 bg-muted rounded mb-4 w-48" />
@@ -62,65 +64,31 @@ export default function CampaignDetailPage({
 
   if (error || !campaign) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-destructive text-lg mb-4">
-            Campaign not found
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        <SiteHeader />
+        <div className="flex items-center justify-center px-4 py-20">
+          <div className="text-center max-w-md">
+            <div className="text-destructive text-lg mb-4">
+              Campaign not found
+            </div>
+            <p className="text-muted-foreground mb-4">
+              {error || "The campaign you're looking for doesn't exist."}
+            </p>
+            <Button asChild>
+              <Link href="/campaigns">Back to Campaigns</Link>
+            </Button>
           </div>
-          <p className="text-muted-foreground mb-4">
-            {error || "The campaign you're looking for doesn't exist."}
-          </p>
-          <Button asChild>
-            <Link href="/campaigns">Back to Campaigns</Link>
-          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl text-foreground">FundFlow</span>
-          </Link>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/campaigns"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Campaigns
-            </Link>
-            <Link
-              href="/create"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Start Campaign
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              About
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <WalletConnect />
-            <Button size="sm" asChild>
-              <Link href="/create">Launch Campaign</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <SiteHeader />
 
       <div className="container mx-auto px-4 py-4">
-        <Button variant="ghost" asChild className="mb-4">
+        <Button variant="ghost" asChild className="mb-4 -ml-2">
           <Link href="/campaigns">
             <ArrowLeft className="w-4 h-4 mr-2" />
             Back to Campaigns
@@ -129,16 +97,16 @@ export default function CampaignDetailPage({
       </div>
 
       <section className="container mx-auto px-4 pb-8">
-        <div className="grid lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+          <div className="lg:col-span-2 order-1">
             <div className="mb-6">
               <Badge variant="secondary" className="mb-4 capitalize">
                 {campaign.category}
               </Badge>
-              <h1 className="text-3xl lg:text-4xl font-bold text-foreground mb-4 text-balance">
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-foreground mb-4 text-balance">
                 {campaign.title}
               </h1>
-              <p className="text-xl text-muted-foreground mb-6">
+              <p className="text-base sm:text-xl text-muted-foreground mb-6">
                 {campaign.summary}
               </p>
 
@@ -168,14 +136,14 @@ export default function CampaignDetailPage({
               <ImageWithFallback
                 src={campaign.imageUrl || "/placeholder.jpg"}
                 alt={campaign.title}
-                className="w-full rounded-lg aspect-video"
+                className="w-full rounded-lg aspect-video object-cover"
                 fill
                 sizes="(max-width: 768px) 100vw, (max-width: 1200px) 66vw, 50vw"
               />
             </div>
           </div>
 
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-1 order-2">
             <CampaignFundingSidebar
               campaign={campaign}
               onFunded={handleFunded}
@@ -185,7 +153,7 @@ export default function CampaignDetailPage({
       </section>
 
       <section className="container mx-auto px-4 pb-12">
-        <div className="grid lg:grid-cols-3 gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
           <div className="lg:col-span-2">
             <CampaignDetailTabs
               description={campaign.description}

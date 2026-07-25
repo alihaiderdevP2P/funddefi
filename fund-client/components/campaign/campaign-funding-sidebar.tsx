@@ -61,7 +61,7 @@ export function CampaignFundingSidebar({
   const countdown = useCountdown(campaign.endDate);
 
   return (
-    <Card className="sticky top-24">
+    <Card className="lg:sticky lg:top-24">
       <CardHeader>
         <div className="text-3xl font-bold text-foreground tabular-nums">
           {formatEthLabel(campaign.raisedAmount)}

@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -482,53 +484,23 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <Settings className="w-8 h-8 text-primary" />
-            <span className="font-bold text-xl text-foreground">Settings</span>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/campaigns"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Campaigns
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/create"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Start Campaign
-            </Link>
-          </nav>
-
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/dashboard">Back to Dashboard</Link>
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <SiteHeader />
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto px-4 py-6 sm:py-8 max-w-6xl">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-foreground mb-2">Settings</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
+            Settings
+          </h1>
           <p className="text-muted-foreground">
             Manage your account settings and preferences
           </p>
         </div>
 
         <Tabs defaultValue="profile" className="space-y-6">
-          <TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex w-max h-auto">
             <TabsTrigger value="profile">
               <User className="w-4 h-4 mr-2" />
               Profile
@@ -549,7 +521,8 @@ export default function SettingsPage() {
               <Globe className="w-4 h-4 mr-2" />
               Preferences
             </TabsTrigger>
-          </TabsList>
+            </TabsList>
+          </div>
 
           {/* Profile Tab */}
           <TabsContent value="profile" className="space-y-6">

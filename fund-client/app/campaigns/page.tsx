@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
@@ -23,7 +25,6 @@ import {
   ArrowRight,
   Search,
   Filter,
-  TrendingUp,
   Clock,
   Users,
   Target,
@@ -32,11 +33,8 @@ import {
 import Link from "next/link";
 import { useCampaigns } from "@/hooks/use-campaigns";
 import { AISearchFilter } from "@/components/ai-search-filter";
-import { useAuth } from "@/hooks/use-auth";
 import { StartCampaignCTA } from "@/components/start-campaign-cta";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
-import { ThemeToggle } from "@/components/theme-toggle";
-import { UserNavigation } from "@/components/user-navigation";
 
 const categories = [
   "All",
@@ -64,7 +62,6 @@ export default function CampaignsPage() {
   const [aiSearchResults, setAiSearchResults] = useState<any[]>([]);
   const [isAiSearchMode, setIsAiSearchMode] = useState(false);
   const [isAiLoading, setIsAiLoading] = useState(false);
-  const { isAuthenticated, user, logout } = useAuth();
 
   const { campaigns, total, loading, error, refetch } = useCampaigns({
     status: "active",
@@ -105,50 +102,17 @@ export default function CampaignsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <TrendingUp className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl text-foreground">FundFlow</span>
-          </Link>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link href="/campaigns" className="text-foreground font-medium">
-              Campaigns
-            </Link>
-            <Link
-              href="/create"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Start Campaign
-            </Link>
-            <Link
-              href="/about"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              About
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <ThemeToggle />
-            <UserNavigation />
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <SiteHeader />
 
       {/* Page Header */}
-      <section className="bg-muted/30 py-12">
+      <section className="bg-muted/30 py-8 sm:py-12">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl">
-            <h1 className="text-4xl font-bold text-foreground mb-4">
+            <h1 className="text-3xl sm:text-4xl font-bold text-foreground mb-4">
               Discover Campaigns
             </h1>
-            <p className="text-xl text-muted-foreground">
+            <p className="text-lg sm:text-xl text-muted-foreground">
               Explore innovative projects from creators around the world. Back
               the ideas you believe in.
             </p>
@@ -215,7 +179,7 @@ export default function CampaignsPage() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           {loading && page === 1 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {Array.from({ length: 6 }).map((_, i) => (
                 <Card key={i} className="campaign-card">
                   <div className="aspect-video bg-muted rounded-t-lg animate-pulse"></div>
@@ -245,7 +209,7 @@ export default function CampaignsPage() {
               <Button onClick={refetch}>Try Again</Button>
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {displayCampaigns.map((campaign, index) => {
                 const progressPercentage =
                   (campaign.raisedAmount / campaign.goalAmount) * 100;

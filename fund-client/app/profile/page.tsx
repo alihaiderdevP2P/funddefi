@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
@@ -86,64 +88,23 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <User className="w-8 h-8 text-primary" />
-            <span className="font-bold text-xl text-foreground">Profile</span>
-          </div>
-
-          <nav className="hidden md:flex items-center space-x-8">
-            <Link
-              href="/campaigns"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Campaigns
-            </Link>
-            <Link
-              href="/dashboard"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Dashboard
-            </Link>
-            <Link
-              href="/create"
-              className="text-muted-foreground hover:text-foreground transition-colors"
-            >
-              Start Campaign
-            </Link>
-          </nav>
-
-          <div className="flex items-center space-x-4">
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/settings">
-                <Settings className="w-4 h-4 mr-2" />
-                Settings
-              </Link>
-            </Button>
-            <Button variant="outline" size="sm" asChild>
-              <Link href="/dashboard">Back to Dashboard</Link>
-            </Button>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <SiteHeader />
 
       {/* Profile Header */}
       <div className="bg-muted/30 border-b">
-        <div className="container mx-auto px-4 py-12">
+        <div className="container mx-auto px-4 py-8 sm:py-12">
           <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 md:space-y-0 md:space-x-8">
-            <Avatar className="w-32 h-32 border-4 border-background">
+            <Avatar className="w-24 h-24 sm:w-32 sm:h-32 border-4 border-background">
               <AvatarImage src={user.avatar} alt={user.name} />
-              <AvatarFallback className="text-4xl">
+              <AvatarFallback className="text-3xl sm:text-4xl">
                 {getInitials(user.name || "User")}
               </AvatarFallback>
             </Avatar>
 
-            <div className="flex-1">
-              <div className="flex items-center space-x-3 mb-2">
-                <h1 className="text-3xl font-bold text-foreground">
+            <div className="flex-1 min-w-0">
+              <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground break-words">
                   {user.name}
                 </h1>
                 {user.isVerified && (
@@ -198,7 +159,7 @@ export default function ProfilePage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         {/* Stats Cards */}
-        <div className="grid md:grid-cols-5 gap-4 mb-8">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3 sm:gap-4 mb-8">
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-sm font-medium text-muted-foreground">
@@ -261,12 +222,14 @@ export default function ProfilePage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab}>
-          <TabsList>
-            <TabsTrigger value="overview">Overview</TabsTrigger>
-            <TabsTrigger value="campaigns">My Campaigns</TabsTrigger>
-            <TabsTrigger value="backed">Backed Campaigns</TabsTrigger>
-            <TabsTrigger value="activity">Activity</TabsTrigger>
-          </TabsList>
+          <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+            <TabsList className="inline-flex w-max h-auto">
+              <TabsTrigger value="overview">Overview</TabsTrigger>
+              <TabsTrigger value="campaigns">My Campaigns</TabsTrigger>
+              <TabsTrigger value="backed">Backed Campaigns</TabsTrigger>
+              <TabsTrigger value="activity">Activity</TabsTrigger>
+            </TabsList>
+          </div>
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6 mt-6">

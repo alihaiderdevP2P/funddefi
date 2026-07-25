@@ -28,11 +28,11 @@ export function UserNavigation() {
 
   if (!user) {
     return (
-      <div className="flex items-center space-x-2">
-        <Button variant="ghost" asChild>
+      <div className="flex items-center gap-2 w-full md:w-auto">
+        <Button variant="ghost" className="flex-1 md:flex-none min-h-10" asChild>
           <Link href="/login">Sign In</Link>
         </Button>
-        <Button asChild>
+        <Button className="flex-1 md:flex-none min-h-10" asChild>
           <Link href="/register">Sign Up</Link>
         </Button>
       </div>

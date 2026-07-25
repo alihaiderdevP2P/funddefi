@@ -360,3 +360,121 @@ MIT License - see LICENSE file for details
 
 Built with ❤️ using Next.js, NestJS, Ethereum, and AI
 
+
+
+update1. SEPOLIA_RPC_URL (Infura)
+Open: https://app.infura.io/register
+Account banao / login
+Create New Key → Network: Web3 API
+Key open karo → Endpoints → Sepolia copy karo
+Paste:
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/YOUR_INFURA_PROJECT_ID
+Alt (Alchemy): https://www.alchemy.com/ → App create → Sepolia → HTTPS URL copy
+
+2. POLYGON_RPC_URL
+Public RPC already kaam kar sakti hai:
+
+POLYGON_RPC_URL=https://polygon-rpc.com
+Better (Infura/Alchemy):
+
+Infura: same key → Polygon endpoint
+Ya: https://docs.polygon.technology/tools/rpc/ → public RPC list
+3. MUMBAI_RPC_URL ⚠️
+Mumbai shut down ho chuka hai. Ab Amoy use hota hai.
+
+Purani value ignore karo, agar testnet chahiye to Amoy:
+
+# optional / future
+# https://rpc-amoy.polygon.technology
+Abhi deploy skip kar rahe ho to is line ko blank / default chhod sakte ho.
+
+4. PRIVATE_KEY (MetaMask wallet)
+Chrome: https://metamask.io/download/
+Wallet create / unlock
+Account menu (3 dots) → Account details → Show private key
+Password → copy (bina 0x ke, ya Hardhat ke hisaab se)
+PRIVATE_KEY=your_64_char_hex_private_key
+Warning:
+
+Kabhi GitHub / Vercel / chat pe mat daalo
+Sirf test wallet use karo (main funds nahi)
+Sepolia ETH faucet: https://www.alchemy.com/faucets/ethereum-sepolia
+5. ETHERSCAN_API_KEY (contract verify)
+Open: https://etherscan.io/register
+Login → https://etherscan.io/myapikey
+Add → name do → Create
+Key copy:
+ETHERSCAN_API_KEY=YourEtherscanKey
+6. POLYGONSCAN_API_KEY
+Open: https://polygonscan.com/register
+Login → https://polygonscan.com/myapikey
+Create API key → copy:
+POLYGONSCAN_API_KEY=YourPolygonscanKey
+Final local example (sirf contract deploy)
+SEPOLIA_RPC_URL=https://sepolia.infura.io/v3/abcd1234...
+POLYGON_RPC_URL=https://polygon-rpc.com
+MUMBAI_RPC_URL=https://rpc-amoy.polygon.technology
+PRIVATE_KEY=abc123...  # test wallet only
+ETHERSCAN_API_KEY=YourEtherscanKey
+POLYGONSCAN_API_KEY=YourPolygonscanKey
+Abhi kya karna hai?
+Goal	Action
+Sirf frontend + backend live
+Yeh 6 lines skip — Vercel pe mat add
+Smart contract deploy baad mein
+Upar wale steps se keys lo, local .env mein rakho
+Pehle Vercel + Render theek chalao; contracts baad mein.
+
+vercel main .env add karo 
+
+.env (1-16)
+ 
+
+Nahi — yeh fund-server/.env Vercel pe mat add karo.
+
+App	Host	Kaunsi .env
+Frontend (fund-client)
+Vercel
+Client env
+Backend (fund-server)
+Render
+Server env (yeh wali)
+Vercel pe NestJS backend nahi chal raha — wahan sirf Next.js client hai.
+
+Vercel pe yeh add karo (client)
+NEXT_PUBLIC_API_URL=https://funddefi-server.onrender.com/api
+NEXT_PUBLIC_WS_URL=https://funddefi-server.onrender.com
+BACKEND_URL=https://funddefi-server.onrender.com/api
+NEXT_PUBLIC_LANG_DEFAULT=en
+NEXT_PUBLIC_LANG_FALLBACK=en
+NEXT_PUBLIC_FACTORY_ADDRESS=0x0000000000000000000000000000000000000000
+GEMINI_API_KEY=your-gemini-key
+NEXT_PUBLIC_SUPABASE_URL=https://nkwvphdtvfcwdeqocupj.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+Render pe yeh add karo (server — tumhari wali)
+Render → funddefi-server → Environment → paste:
+
+DB_HOST=aws-0-ap-southeast-1.pooler.supabase.com
+DB_PORT=5432
+DB_USERNAME=postgres.nkwvphdtvfcwdeqocupj
+DB_PASSWORD=deficrowd_12345
+DB_NAME=postgres
+SUPABASE_URL=https://nkwvphdtvfcwdeqocupj.supabase.co
+SUPABASE_STORAGE_BUCKET=campaign-images
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+JWT_SECRET=deficrowd_12345
+JWT_EXPIRES_IN=7d
+PORT=3001
+NODE_ENV=production
+LANG_DEFAULT=en
+LANG_FALLBACK=en
+CORS_ORIGINS=https://your-vercel-url.vercel.app,http://localhost:3000
+NODE_ENV production pe production rakho. CORS_ORIGINS mein apna real Vercel URL daalo.
+
+Security: DB password, JWT, aur service role key chat mein expose ho chuki hain — baad mein rotate karna better hai.
+
+
+---
+
+Built with ❤️ using Next.js, NestJS, Ethereum, and AI
+

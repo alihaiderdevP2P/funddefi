@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -48,23 +50,8 @@ export default function BlogPostPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-border bg-background/95 backdrop-blur sticky top-0 z-50">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-              <BookOpen className="w-5 h-5 text-primary-foreground" />
-            </div>
-            <span className="font-bold text-xl">FundFlow</span>
-          </Link>
-          <Button variant="outline" size="sm" asChild>
-            <Link href="/blog">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              All Articles
-            </Link>
-          </Button>
-        </div>
-      </header>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      <SiteHeader />
 
       <article className="container mx-auto px-4 py-12 max-w-4xl">
         <div className="flex flex-wrap items-center gap-3 mb-6">

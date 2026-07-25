@@ -1,36 +1,32 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { WalletConnect } from "@/components/wallet-connect";
 import { WalletGuard } from "@/components/wallet-guard";
 import {
   TrendingUp,
   Heart,
   Settings,
-  Plus,
   BarChart3,
   Users,
   DollarSign,
   Download,
-  Bell,
   Brain,
-  Shield,
   AlertCircle,
   RefreshCw,
 } from "lucide-react";
-import Link from "next/link";
 import { DashboardAnalytics } from "@/components/dashboard-analytics";
 import { DashboardBackedTab } from "@/components/dashboard-backed-tab";
 import { CampaignManagement } from "@/components/campaign-management";
 import { AICampaignRecommendations } from "@/components/ai-campaign-recommendations";
 import { useAuth } from "@/hooks/use-auth";
 import { useDashboard } from "@/hooks/use-dashboard";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { RoleAuthGuard } from "@/components/role-auth-guard";
 import { formatEthLabel } from "@/lib/format-eth";
 import { exportDashboardCsv } from "@/lib/dashboard-utils";
@@ -53,7 +49,7 @@ function StatCardSkeleton() {
 
 export default function DashboardPage() {
   const [activeTab, setActiveTab] = useState("overview");
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const { toast } = useToast();
   const {
     dashboard,
@@ -98,65 +94,13 @@ export default function DashboardPage() {
         title="Connect to View Dashboard"
         description="Connect your wallet to access your crowdfunding dashboard"
       >
-        <div className="min-h-screen bg-background">
-          <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-            <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-              <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <TrendingUp className="w-5 h-5 text-primary-foreground" />
-                </div>
-                <span className="font-bold text-xl text-foreground">
-                  FundFlow
-                </span>
-              </Link>
+        <div className="min-h-screen bg-background overflow-x-hidden">
+          <SiteHeader />
 
-              <nav className="hidden md:flex items-center space-x-8">
-                <Link
-                  href="/campaigns"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Campaigns
-                </Link>
-                <Link
-                  href="/create"
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  Start Campaign
-                </Link>
-                <Link href="/dashboard" className="text-foreground font-medium">
-                  Dashboard
-                </Link>
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    className="text-muted-foreground hover:text-foreground transition-colors flex items-center"
-                  >
-                    <Shield className="w-4 h-4 mr-1" />
-                    Admin
-                  </Link>
-                )}
-              </nav>
-
-              <div className="flex items-center space-x-4">
-                <ThemeToggle />
-                <Button variant="ghost" size="sm">
-                  <Bell className="w-4 h-4" />
-                </Button>
-                <WalletConnect />
-                <Button size="sm" asChild>
-                  <Link href="/create">
-                    <Plus className="w-4 h-4 mr-2" />
-                    New Campaign
-                  </Link>
-                </Button>
-              </div>
-            </div>
-          </header>
-
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-6 sm:py-8">
             <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div>
-                <h1 className="text-3xl font-bold text-foreground mb-2">
+                <h1 className="text-2xl sm:text-3xl font-bold text-foreground mb-2">
                   Dashboard
                 </h1>
                 <p className="text-muted-foreground">
@@ -168,6 +112,7 @@ export default function DashboardPage() {
                 size="sm"
                 onClick={() => refetch()}
                 disabled={loading}
+                className="self-start sm:self-auto"
               >
                 <RefreshCw
                   className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
@@ -188,7 +133,7 @@ export default function DashboardPage() {
               </Alert>
             )}
 
-            <div className="grid md:grid-cols-4 gap-6 mb-8">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
               {loading ? (
                 Array.from({ length: 4 }).map((_, i) => (
                   <StatCardSkeleton key={i} />
@@ -272,31 +217,33 @@ export default function DashboardPage() {
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab}>
-              <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:grid-cols-4">
-                <TabsTrigger value="overview" className="flex items-center">
-                  <BarChart3 className="w-4 h-4 mr-2" />
-                  Overview
-                </TabsTrigger>
-                <TabsTrigger value="backed" className="flex items-center">
-                  <Heart className="w-4 h-4 mr-2" />
-                  Backed
-                </TabsTrigger>
-                <TabsTrigger value="created" className="flex items-center">
-                  <Settings className="w-4 h-4 mr-2" />
-                  My Campaigns
-                </TabsTrigger>
-                <TabsTrigger value="analytics" className="flex items-center">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Analytics
-                </TabsTrigger>
-              </TabsList>
+              <div className="overflow-x-auto -mx-4 px-4 sm:mx-0 sm:px-0">
+                <TabsList className="inline-flex w-max min-w-full sm:min-w-0 sm:w-auto h-auto flex-nowrap gap-1 p-1">
+                  <TabsTrigger value="overview" className="flex items-center gap-2 shrink-0">
+                    <BarChart3 className="w-4 h-4" />
+                    <span>Overview</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="backed" className="flex items-center gap-2 shrink-0">
+                    <Heart className="w-4 h-4" />
+                    <span>Backed</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="created" className="flex items-center gap-2 shrink-0">
+                    <Settings className="w-4 h-4" />
+                    <span className="whitespace-nowrap">My Campaigns</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="analytics" className="flex items-center gap-2 shrink-0">
+                    <TrendingUp className="w-4 h-4" />
+                    <span>Analytics</span>
+                  </TabsTrigger>
+                </TabsList>
+              </div>
 
               <TabsContent value="overview" className="mt-6">
                 <DashboardAnalytics data={dashboard} loading={loading} />
 
                 <div className="mt-8">
-                  <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-2xl font-bold text-foreground">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
+                    <h2 className="text-xl sm:text-2xl font-bold text-foreground">
                       AI-Powered Recommendations
                     </h2>
                     <Badge

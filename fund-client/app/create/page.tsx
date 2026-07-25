@@ -1,5 +1,7 @@
 "use client";
 
+import { SiteHeader } from "@/components/site-header";
+
 import type React from "react";
 
 import { useState } from "react";
@@ -27,7 +29,6 @@ import {
   ArrowLeft,
   ArrowRight,
   Upload,
-  TrendingUp,
   Eye,
   CheckCircle,
 } from "lucide-react";
@@ -35,7 +36,6 @@ import Link from "next/link";
 import { AICampaignAssistant } from "@/components/ai-campaign-assistant";
 import { RoleAuthGuard } from "@/components/role-auth-guard";
 import { CampaignCreationGuide } from "@/components/campaign-creation-guide";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { useAuth } from "@/hooks/use-auth";
 
 const steps = [
@@ -70,7 +70,7 @@ interface Reward {
 }
 
 export default function CreateCampaignPage() {
-  const { token, isAuthenticated, user, logout } = useAuth();
+  const { token, isAuthenticated, user } = useAuth();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
@@ -942,73 +942,16 @@ export default function CreateCampaignPage() {
       title="Authentication Required"
       description="Please sign in to create and deploy your crowdfunding campaign"
     >
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <header className="border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50">
-          <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-            <Link href="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                <TrendingUp className="w-5 h-5 text-primary-foreground" />
-              </div>
-              <span className="font-bold text-xl text-foreground">
-                FundFlow
-              </span>
-            </Link>
+      <div className="min-h-screen bg-background overflow-x-hidden">
+        <SiteHeader />
 
-            <nav className="hidden md:flex items-center space-x-8">
-              <Link
-                href="/campaigns"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                Campaigns
-              </Link>
-              <Link href="/create" className="text-foreground font-medium">
-                Start Campaign
-              </Link>
-              <Link
-                href="/about"
-                className="text-muted-foreground hover:text-foreground transition-colors"
-              >
-                About
-              </Link>
-            </nav>
-
-            <div className="flex items-center space-x-4">
-              <ThemeToggle />
-              {isAuthenticated ? (
-                <div className="flex items-center space-x-3">
-                  <span className="text-sm text-muted-foreground">
-                    Welcome, {user?.name}
-                  </span>
-                  <Button variant="ghost" size="sm" onClick={logout}>
-                    Logout
-                  </Button>
-                </div>
-              ) : (
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm" asChild>
-                    <Link href="/login">Login</Link>
-                  </Button>
-                  <Button size="sm" asChild>
-                    <Link href="/register">Sign Up</Link>
-                  </Button>
-                </div>
-              )}
-              <Button variant="ghost" size="sm" asChild>
-                <Link href="/campaigns">
-                  <Eye className="w-4 h-4 mr-2" />
-                  Preview
-                </Link>
-              </Button>
-            </div>
-          </div>
-        </header>
-
-        <div className="container mx-auto px-4 py-8">
+        <div className="container mx-auto px-4 py-6 sm:py-8">
           {/* Help Section */}
           <div className="mb-8">
             <div className="text-center mb-8">
-              <h1 className="text-3xl font-bold mb-4">Create Your Campaign</h1>
+              <h1 className="text-2xl sm:text-3xl font-bold mb-4">
+                Create Your Campaign
+              </h1>
               <p className="text-muted-foreground max-w-2xl mx-auto">
                 Follow our step-by-step process to launch your
                 blockchain-powered crowdfunding campaign. Need help? Check out
@@ -1035,11 +978,12 @@ export default function CreateCampaignPage() {
               className="mb-6"
             />
 
-            <div className="flex items-center justify-between">
+            <div className="overflow-x-auto pb-2 -mx-1 px-1">
+              <div className="flex items-center justify-between min-w-[36rem] sm:min-w-0">
               {steps.map((step, index) => (
                 <div key={step.id} className="flex items-center">
                   <div
-                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
+                    className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium shrink-0 ${
                       step.id <= currentStep
                         ? "bg-primary text-primary-foreground"
                         : "bg-muted text-muted-foreground"
@@ -1051,7 +995,7 @@ export default function CreateCampaignPage() {
                       step.id
                     )}
                   </div>
-                  <div className="ml-2 hidden sm:block">
+                  <div className="ml-2 hidden md:block">
                     <div
                       className={`text-sm font-medium ${
                         step.id <= currentStep
@@ -1061,19 +1005,20 @@ export default function CreateCampaignPage() {
                     >
                       {step.title}
                     </div>
-                    <div className="text-xs text-muted-foreground">
+                    <div className="text-xs text-muted-foreground max-w-[7rem] lg:max-w-none">
                       {step.description}
                     </div>
                   </div>
                   {index < steps.length - 1 && (
                     <div
-                      className={`w-12 h-px mx-4 ${
+                      className={`w-6 sm:w-12 h-px mx-2 sm:mx-4 shrink-0 ${
                         step.id < currentStep ? "bg-primary" : "bg-border"
                       }`}
                     />
                   )}
                 </div>
               ))}
+              </div>
             </div>
           </div>
 
@@ -1090,7 +1035,7 @@ export default function CreateCampaignPage() {
             </Card>
 
             {/* Navigation */}
-            <div className="flex items-center justify-between mt-8">
+            <div className="flex items-center justify-between gap-3 mt-8">
               <Button
                 variant="outline"
                 onClick={prevStep}
