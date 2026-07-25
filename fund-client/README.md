@@ -449,20 +449,20 @@ NEXT_PUBLIC_LANG_DEFAULT=en
 NEXT_PUBLIC_LANG_FALLBACK=en
 NEXT_PUBLIC_FACTORY_ADDRESS=0x0000000000000000000000000000000000000000
 GEMINI_API_KEY=your-gemini-key
-NEXT_PUBLIC_SUPABASE_URL=https://nkwvphdtvfcwdeqocupj.supabase.co
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 Render pe yeh add karo (server — tumhari wali)
 Render → funddefi-server → Environment → paste:
 
-DB_HOST=aws-0-ap-southeast-1.pooler.supabase.com
+DB_HOST=your-db-host.pooler.supabase.com
 DB_PORT=5432
-DB_USERNAME=postgres.nkwvphdtvfcwdeqocupj
-DB_PASSWORD=deficrowd_12345
+DB_USERNAME=postgres.your-project-ref
+DB_PASSWORD=your-db-password
 DB_NAME=postgres
-SUPABASE_URL=https://nkwvphdtvfcwdeqocupj.supabase.co
+SUPABASE_URL=https://your-project.supabase.co
 SUPABASE_STORAGE_BUCKET=campaign-images
 SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
-JWT_SECRET=deficrowd_12345
+JWT_SECRET=your-jwt-secret
 JWT_EXPIRES_IN=7d
 PORT=3001
 NODE_ENV=production
@@ -471,10 +471,8 @@ LANG_FALLBACK=en
 CORS_ORIGINS=https://your-vercel-url.vercel.app,http://localhost:3000
 NODE_ENV production pe production rakho. CORS_ORIGINS mein apna real Vercel URL daalo.
 
-Security: DB password, JWT, aur service role key chat mein expose ho chuki hain — baad mein rotate karna better hai.
-
+Local setup: copy `fund-client/.env.example` and `fund-server/.env.example` to `.env` and fill in real values. Never commit real API keys, private keys, or passwords.
 
 ---
 
-Built with ❤️ using Next.js, NestJS, Ethereum, and AI
-
+Built with heart using Next.js, NestJS, Ethereum, and AI

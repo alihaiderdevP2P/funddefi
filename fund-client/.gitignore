@@ -31,6 +31,14 @@ Thumbs.db
 # Coverage
 coverage/
 
+# credential
+# doc/credential.txt
+.env
+credential.md
+credential.txt
+*.pem
+*.key
+
 # Cache
 .cache/
 .next/
