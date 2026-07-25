@@ -2,9 +2,17 @@
  * Run database/supabase-init.sql against Supabase Postgres.
  * Uses direct host (db.*.supabase.co) when pooler fails with ENOIDENTIFIER.
  */
+const dns = require("dns");
 const fs = require("fs");
 const path = require("path");
 const { Client } = require("pg");
+
+// Prefer IPv4 — Node often fails ENOTFOUND on Supabase hosts otherwise
+try {
+  dns.setDefaultResultOrder("ipv4first");
+} catch {
+  /* Node < 16.0 */
+}
 
 const envPath = path.join(__dirname, "..", ".env");
 if (fs.existsSync(envPath)) {
@@ -25,25 +33,61 @@ if (fs.existsSync(envPath)) {
   }
 }
 
-const projectRef = "wmisztjcuknanjxtwejz";
+function resolveProjectRef() {
+  const fromUrl = (process.env.SUPABASE_URL || "").match(
+    /https?:\/\/([a-z0-9]+)\.supabase\.co/i
+  );
+  if (fromUrl) return fromUrl[1];
+
+  const user = process.env.DB_USERNAME || process.env.DB_USER || "";
+  const fromUser = user.match(/^postgres\.([a-z0-9]+)$/i);
+  if (fromUser) return fromUser[1];
+
+  const host = process.env.DB_HOST || "";
+  const fromHost = host.match(
+    /(?:db|aws-0-[a-z0-9-]+)\.([a-z0-9]+)\.supabase\.co/i
+  );
+  if (fromHost) return fromHost[1];
+
+  return null;
+}
 
 function buildConfig() {
   if (process.env.DATABASE_URL) {
-    return { connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } };
+    return {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    };
   }
-  const useDirect =
-    process.env.DB_USE_DIRECT === "true" ||
-    (process.env.DB_HOST || "").includes("pooler");
-  const host = useDirect
-    ? `db.${projectRef}.supabase.co`
-    : process.env.DB_HOST || "localhost";
+
+  const hostEnv = process.env.DB_HOST || "localhost";
+  const isSupabase =
+    hostEnv.includes("supabase") || Boolean(process.env.SUPABASE_URL);
+  const projectRef = resolveProjectRef();
+  // Prefer pooler from .env; only switch to direct when DB_USE_DIRECT=true
+  const useDirect = process.env.DB_USE_DIRECT === "true";
+
+  let host = hostEnv;
+  let user = process.env.DB_USERNAME || process.env.DB_USER || "postgres";
+  let port = Number.parseInt(process.env.DB_PORT || "5432", 10);
+
+  if (useDirect && projectRef) {
+    host = `db.${projectRef}.supabase.co`;
+    port = 5432;
+    // Direct connection uses postgres, not postgres.<ref>
+    if (user.startsWith("postgres.")) user = "postgres";
+  }
+
   return {
     host,
-    port: Number.parseInt(process.env.DB_PORT || "5432", 10),
-    user: process.env.DB_USERNAME || process.env.DB_USER || "postgres",
+    port,
+    user,
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME || "postgres",
-    ssl: process.env.DB_SSL === "true" ? { rejectUnauthorized: false } : false,
+    ssl:
+      process.env.DB_SSL === "true" || isSupabase
+        ? { rejectUnauthorized: false }
+        : false,
   };
 }
 
@@ -53,12 +97,16 @@ async function main() {
   const config = buildConfig();
   const client = new Client(config);
 
-  console.log("Connecting to", config.connectionString ? "DATABASE_URL" : config.host);
+  console.log(
+    "Connecting to",
+    config.connectionString ? "DATABASE_URL" : `${config.host} as ${config.user}`
+  );
   await client.connect();
   console.log("Running supabase-init.sql...");
   await client.query(sql);
   await client.end();
   console.log("Migration completed successfully.");
+  process.exit(0);
 }
 
 main().catch((err) => {

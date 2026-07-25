@@ -3,13 +3,14 @@ import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
 
-let cachedApp: any;
-
 async function createApp() {
   const app = await NestFactory.create(AppModule);
 
   const globalPrefix = "api";
-  const allowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://funddefi-client.vercel.app")
+  const allowedOrigins = (
+    process.env.CORS_ORIGINS ||
+    "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://funddefi-client.vercel.app"
+  )
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean);
@@ -39,18 +40,14 @@ async function createApp() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup("docs", app, document);
 
-  await app.init();
-
   return app;
 }
 
-export default async function handler(req: any, res: any) {
-  if (!cachedApp) {
-    cachedApp = await createApp();
-  }
-
-  const httpAdapter = cachedApp.getHttpAdapter();
-  const instance = httpAdapter.getInstance();
-
-  return instance(req, res);
+async function bootstrap() {
+  const app = await createApp();
+  const port = Number(process.env.PORT) || 3001;
+  await app.listen(port, "0.0.0.0");
+  console.log(`Application listening on port ${port}`);
 }
+
+bootstrap();
