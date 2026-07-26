@@ -929,9 +929,11 @@ npx hardhat run scripts/deploy.js --network sepolia
 
 ### CORS
 
+
 Backend CORS is configured for `localhost:3000` and a placeholder production domain. Update in `fund-server/src/main.ts` for your domain.
 
 ---
+
 
 ## Security
 
