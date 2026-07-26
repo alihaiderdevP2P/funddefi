@@ -3,7 +3,7 @@ pragma solidity ^0.8.19;
 
 /**
  * @title Campaign
- * @dev Individual crowdfunding campaign contract
+ * @dev Individual crowdfunding campaign contract with platform success fee
  */
 contract Campaign {
     struct Contribution {
@@ -20,6 +20,8 @@ contract Campaign {
     }
     
     address public creator;
+    address public feeRecipient;
+    uint256 public feeBps; // e.g. 500 = 5%
     string public title;
     string public description;
     string public category;
@@ -39,6 +41,7 @@ contract Campaign {
     event ContributionMade(address indexed contributor, uint256 amount);
     event GoalReached(uint256 totalAmount);
     event FundsWithdrawn(address indexed creator, uint256 amount);
+    event PlatformFeePaid(address indexed recipient, uint256 amount);
     event RefundIssued(address indexed contributor, uint256 amount);
     event CampaignCancelled();
     event MilestoneAdded(uint256 index, string description, uint256 amount);
@@ -66,14 +69,22 @@ contract Campaign {
         string memory _description,
         uint256 _goal,
         uint256 _deadline,
-        string memory _category
+        string memory _category,
+        address _feeRecipient,
+        uint256 _feeBps
     ) {
+        require(_creator != address(0), "Invalid creator");
+        require(_feeRecipient != address(0), "Invalid fee recipient");
+        require(_feeBps <= 1000, "Fee too high"); // max 10%
+        
         creator = _creator;
         title = _title;
         description = _description;
         goal = _goal;
         deadline = _deadline;
         category = _category;
+        feeRecipient = _feeRecipient;
+        feeBps = _feeBps;
     }
     
     /**
@@ -100,7 +111,21 @@ contract Campaign {
     }
     
     /**
-     * @dev Withdraw funds if goal is reached (creator only)
+     * @dev Preview withdraw split (gross, fee, creator net)
+     */
+    function getWithdrawPreview() public view returns (
+        uint256 gross,
+        uint256 fee,
+        uint256 creatorNet
+    ) {
+        gross = address(this).balance;
+        fee = (gross * feeBps) / 10000;
+        creatorNet = gross - fee;
+    }
+    
+    /**
+     * @dev Withdraw funds if goal is reached (creator only).
+     *      Platform fee is skimmed to feeRecipient; creator receives the rest.
      */
     function withdrawFunds() public onlyCreator campaignEnded {
         require(goalReached, "Goal not reached");
@@ -109,11 +134,19 @@ contract Campaign {
         
         fundsWithdrawn = true;
         uint256 amount = address(this).balance;
+        uint256 fee = (amount * feeBps) / 10000;
+        uint256 creatorAmount = amount - fee;
         
-        (bool success, ) = payable(creator).call{value: amount}("");
+        if (fee > 0) {
+            (bool feeOk, ) = payable(feeRecipient).call{value: fee}("");
+            require(feeOk, "Fee transfer failed");
+            emit PlatformFeePaid(feeRecipient, fee);
+        }
+        
+        (bool success, ) = payable(creator).call{value: creatorAmount}("");
         require(success, "Transfer failed");
         
-        emit FundsWithdrawn(creator, amount);
+        emit FundsWithdrawn(creator, creatorAmount);
     }
     
     /**

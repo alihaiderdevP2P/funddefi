@@ -101,6 +101,45 @@ export class SmartContractService {
     }
   }
 
+  async withdrawFunds(campaignAddress: string) {
+    if (!this.signer) await this.initialize();
+
+    try {
+      const result = await contractService.withdrawFunds(campaignAddress);
+      return {
+        success: true,
+        transactionHash: result.transactionHash || result.hash,
+      };
+    } catch (error: any) {
+      console.error("Withdraw error:", error);
+      const message =
+        error?.data?.message ||
+        error?.reason ||
+        error?.message ||
+        "Failed to withdraw funds";
+      return {
+        success: false,
+        error: message,
+      };
+    }
+  }
+
+  async getWithdrawPreview(campaignAddress: string) {
+    try {
+      const preview = await contractService.getWithdrawPreview(campaignAddress);
+      return {
+        success: true,
+        preview,
+      };
+    } catch (error: any) {
+      console.error("Withdraw preview error:", error);
+      return {
+        success: false,
+        error: error.message || "Failed to load withdraw preview",
+      };
+    }
+  }
+
   async getCampaignDetails(campaignAddress: string) {
     try {
       const details = await contractService.getCampaignDetails(campaignAddress);

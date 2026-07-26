@@ -54,6 +54,8 @@ import {
 } from "@/lib/dashboard-utils";
 import { formatEthLabel } from "@/lib/format-eth";
 import { useToast } from "@/hooks/use-toast";
+import { WithdrawFundsDialog } from "@/components/withdraw-funds-dialog";
+import { calcPlatformFee, formatFeePercent } from "@/lib/platform-fees";
 
 interface CampaignManagementProps {
   campaigns: CreatedCampaignView[];
@@ -485,6 +487,25 @@ export function CampaignManagement({
                         campaign={campaign}
                         onSaved={() => onRefresh?.()}
                       />
+
+                      {campaign.canWithdraw && campaign.contractAddress && (
+                        <WithdrawFundsDialog
+                          campaignId={campaign.id}
+                          campaignTitle={campaign.title}
+                          contractAddress={campaign.contractAddress}
+                          raisedEth={campaign.raised}
+                          onSuccess={() => onRefresh?.()}
+                        />
+                      )}
+
+                      {campaign.status === "active" &&
+                        campaign.raised >= campaign.goal &&
+                        campaign.daysLeft > 0 && (
+                          <span className="text-xs text-muted-foreground self-center max-w-[10rem]">
+                            Withdraw opens after deadline (
+                            {formatFeePercent(calcPlatformFee(0).bps)} fee)
+                          </span>
+                        )}
 
                       {campaign.status === "active" && (
                         <AlertDialog>

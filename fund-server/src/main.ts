@@ -1,12 +1,13 @@
 import { NestFactory } from "@nestjs/core";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
+import { setupRoleSwaggerDocs } from "./swagger-role-docs";
+
+const GLOBAL_PREFIX = "api/v1";
 
 async function createApp() {
   const app = await NestFactory.create(AppModule);
 
-  const globalPrefix = "api";
   const allowedOrigins = (
     process.env.CORS_ORIGINS ||
     "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://funddefi-client.vercel.app"
@@ -15,7 +16,7 @@ async function createApp() {
     .map((origin) => origin.trim())
     .filter(Boolean);
 
-  app.setGlobalPrefix(globalPrefix);
+  app.setGlobalPrefix(GLOBAL_PREFIX);
 
   app.useGlobalPipes(
     new ValidationPipe({
@@ -30,15 +31,7 @@ async function createApp() {
     credentials: true,
   });
 
-  const config = new DocumentBuilder()
-    .setTitle("Crowdfunding 3.0 API")
-    .setDescription("API Documentation")
-    .setVersion("1.0")
-    .addBearerAuth()
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
+  setupRoleSwaggerDocs(app, GLOBAL_PREFIX);
 
   return app;
 }
@@ -49,8 +42,11 @@ async function bootstrap() {
   await app.listen(port, "0.0.0.0");
   const baseUrl = `http://localhost:${port}`;
   console.log(`Application listening on port ${port}`);
-  console.log(`API:     ${baseUrl}/api`);
-  console.log(`Swagger: ${baseUrl}/docs`);
+  console.log(`API:              ${baseUrl}/${GLOBAL_PREFIX}`);
+  console.log(`Swagger (all):    ${baseUrl}/docs`);
+  console.log(`Swagger (user):   ${baseUrl}/docs/user`);
+  console.log(`Swagger (admin):  ${baseUrl}/docs/admin`);
+  console.log(`Swagger (super):  ${baseUrl}/docs/superadmin`);
 }
 
 bootstrap();

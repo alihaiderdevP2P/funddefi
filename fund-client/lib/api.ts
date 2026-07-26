@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api/v1";
 
 // Create axios instance with default config
 const api = axios.create({
@@ -230,6 +230,16 @@ export const authAPI = {
     const response = await api.get("/auth/profile");
     return response.data;
   },
+
+  getRoleAvailability: async (): Promise<{
+    max: number;
+    admin: { count: number; available: boolean };
+    superadmin: { count: number; available: boolean };
+  }> => {
+    const response = await api.get("/auth/role-availability");
+    return response.data;
+  },
+
   logout: async (token?: string) => {
     const response = await api.post(
       "/auth/logout",

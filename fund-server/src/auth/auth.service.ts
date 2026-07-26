@@ -99,14 +99,11 @@ export class AuthService {
 
     const role = registerDto.role || "user";
 
-    if (role === "superadmin") {
-      const allUsers = await this.usersService.findAll();
-      const superadminCount = allUsers.filter(
-        (u) => u.role === "superadmin"
-      ).length;
-      if (superadminCount >= 3) {
+    if (role === "admin" || role === "superadmin") {
+      const count = await this.usersService.countByRole(role);
+      if (count >= UsersService.MAX_PRIVILEGED_ROLE) {
         throw new BadRequestException(
-          "Maximum of 3 superadmin accounts allowed"
+          `Maximum of ${UsersService.MAX_PRIVILEGED_ROLE} ${role} accounts allowed`
         );
       }
     }
@@ -132,6 +129,26 @@ export class AuthService {
     return {
       access_token,
       user: result,
+    };
+  }
+
+  /** Public: used by register UI to hide Admin/Superadmin once max (3) is reached. */
+  async getRoleAvailability() {
+    const max = UsersService.MAX_PRIVILEGED_ROLE;
+    const [adminCount, superadminCount] = await Promise.all([
+      this.usersService.countByRole("admin"),
+      this.usersService.countByRole("superadmin"),
+    ]);
+    return {
+      max,
+      admin: {
+        count: adminCount,
+        available: adminCount < max,
+      },
+      superadmin: {
+        count: superadminCount,
+        available: superadminCount < max,
+      },
     };
   }
 

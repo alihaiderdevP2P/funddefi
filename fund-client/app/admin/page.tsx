@@ -146,7 +146,7 @@ export default function AdminPage() {
                   {statsLoading ? "—" : fundingDisplay}
                 </div>
                 <p className="text-xs text-muted-foreground">
-                  Platform fees: {formatEth(stats.platformFees)}
+                  Est. platform fees (5%): {formatEth(stats.platformFees)}
                 </p>
               </CardContent>
             </Card>

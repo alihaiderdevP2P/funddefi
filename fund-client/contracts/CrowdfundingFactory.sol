@@ -5,9 +5,13 @@ import "./Campaign.sol";
 
 /**
  * @title CrowdfundingFactory
- * @dev Factory contract for creating and managing crowdfunding campaigns
+ * @dev Factory contract for creating campaigns with configurable platform fee
  */
 contract CrowdfundingFactory {
+    address public owner;
+    address public feeRecipient;
+    uint256 public feeBps; // applied to newly created campaigns
+
     address[] public deployedCampaigns;
     mapping(address => address[]) public creatorCampaigns;
     mapping(address => bool) public isCampaign;
@@ -19,6 +23,21 @@ contract CrowdfundingFactory {
         uint256 goal,
         uint256 deadline
     );
+    event FeeConfigUpdated(address indexed feeRecipient, uint256 feeBps);
+    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);
+    
+    modifier onlyOwner() {
+        require(msg.sender == owner, "Only owner");
+        _;
+    }
+    
+    constructor(address _feeRecipient, uint256 _feeBps) {
+        require(_feeRecipient != address(0), "Invalid fee recipient");
+        require(_feeBps <= 1000, "Fee too high");
+        owner = msg.sender;
+        feeRecipient = _feeRecipient;
+        feeBps = _feeBps;
+    }
     
     /**
      * @dev Creates a new crowdfunding campaign
@@ -47,7 +66,9 @@ contract CrowdfundingFactory {
             _description,
             _goal,
             deadline,
-            _category
+            _category,
+            feeRecipient,
+            feeBps
         );
         
         address campaignAddress = address(newCampaign);
@@ -57,6 +78,23 @@ contract CrowdfundingFactory {
         isCampaign[campaignAddress] = true;
         
         emit CampaignCreated(campaignAddress, msg.sender, _title, _goal, deadline);
+    }
+    
+    /**
+     * @dev Update fee settings for future campaigns only
+     */
+    function setFeeConfig(address _feeRecipient, uint256 _feeBps) public onlyOwner {
+        require(_feeRecipient != address(0), "Invalid fee recipient");
+        require(_feeBps <= 1000, "Fee too high");
+        feeRecipient = _feeRecipient;
+        feeBps = _feeBps;
+        emit FeeConfigUpdated(_feeRecipient, _feeBps);
+    }
+    
+    function transferOwnership(address newOwner) public onlyOwner {
+        require(newOwner != address(0), "Invalid owner");
+        emit OwnershipTransferred(owner, newOwner);
+        owner = newOwner;
     }
     
     /**

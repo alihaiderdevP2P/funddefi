@@ -1,8 +1,0 @@
-# Credentials / secrets — never commit
-fund-client/doc/credential.txt
-fund-client/doc/credential.md
-**/.env
-**/.env.local
-**/.env.*.local
-*.pem
-*.key

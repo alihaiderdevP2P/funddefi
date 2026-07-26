@@ -6,7 +6,12 @@ export const CROWDFUNDING_FACTORY_ABI = [
   "function getDeployedCampaigns() public view returns (address[] memory)",
   "function getCampaignsByCreator(address creator) public view returns (address[] memory)",
   "function getCampaignCount() public view returns (uint256)",
+  "function owner() public view returns (address)",
+  "function feeRecipient() public view returns (address)",
+  "function feeBps() public view returns (uint256)",
+  "function setFeeConfig(address _feeRecipient, uint256 _feeBps) public",
   "event CampaignCreated(address indexed campaignAddress, address indexed creator, string title, uint256 goal, uint256 deadline)",
+  "event FeeConfigUpdated(address indexed feeRecipient, uint256 feeBps)",
 ];
 
 export const CAMPAIGN_ABI = [
@@ -15,6 +20,9 @@ export const CAMPAIGN_ABI = [
   "function requestRefund() public",
   "function cancelCampaign() public",
   "function getSummary() public view returns (address, string memory, string memory, uint256, uint256, uint256, uint256, bool, bool, bool)",
+  "function getWithdrawPreview() public view returns (uint256 gross, uint256 fee, uint256 creatorNet)",
+  "function feeRecipient() public view returns (address)",
+  "function feeBps() public view returns (uint256)",
   "function getContributorCount() public view returns (uint256)",
   "function isActive() public view returns (bool)",
   "function getTimeRemaining() public view returns (uint256)",
@@ -22,6 +30,7 @@ export const CAMPAIGN_ABI = [
   "event ContributionMade(address indexed contributor, uint256 amount)",
   "event GoalReached(uint256 totalAmount)",
   "event FundsWithdrawn(address indexed creator, uint256 amount)",
+  "event PlatformFeePaid(address indexed recipient, uint256 amount)",
   "event RefundIssued(address indexed contributor, uint256 amount)",
 ];
 
@@ -102,9 +111,55 @@ export class ContractService {
     return await tx.wait();
   }
 
+  async withdrawFunds(campaignAddress: string) {
+    const campaign = await this.getCampaignContract(campaignAddress);
+    const tx = await campaign.withdrawFunds();
+    return await tx.wait();
+  }
+
+  async getWithdrawPreview(campaignAddress: string) {
+    const campaign = await this.getCampaignContract(campaignAddress);
+    try {
+      const preview = await campaign.getWithdrawPreview();
+      const feeBps = Number(await campaign.feeBps());
+      const feeRecipient = await campaign.feeRecipient();
+      return {
+        gross: ethers.utils.formatEther(preview.gross ?? preview[0]),
+        fee: ethers.utils.formatEther(preview.fee ?? preview[1]),
+        creatorNet: ethers.utils.formatEther(
+          preview.creatorNet ?? preview[2]
+        ),
+        feeBps,
+        feeRecipient,
+        supportsFee: true,
+      };
+    } catch {
+      // Legacy campaigns without fee split
+      const summary = await campaign.getSummary();
+      const grossWei = summary[5];
+      return {
+        gross: ethers.utils.formatEther(grossWei),
+        fee: "0",
+        creatorNet: ethers.utils.formatEther(grossWei),
+        feeBps: 0,
+        feeRecipient: null as string | null,
+        supportsFee: false,
+      };
+    }
+  }
+
   async getCampaignDetails(campaignAddress: string) {
     const campaign = await this.getCampaignContract(campaignAddress);
     const summary = await campaign.getSummary();
+
+    let feeBps: number | null = null;
+    let feeRecipient: string | null = null;
+    try {
+      feeBps = Number(await campaign.feeBps());
+      feeRecipient = await campaign.feeRecipient();
+    } catch {
+      // legacy campaign
+    }
 
     return {
       creator: summary[0],
@@ -117,6 +172,8 @@ export class ContractService {
       goalReached: summary[7],
       fundsWithdrawn: summary[8],
       campaignCancelled: summary[9],
+      feeBps,
+      feeRecipient,
     };
   }
 
