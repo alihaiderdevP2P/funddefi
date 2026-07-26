@@ -105,4 +105,4 @@ jobs:
       # No unit tests yet — --passWithNoTests keeps CI green until specs exist.
       - name: Test
         if: steps.filter.outputs.server == 'true'
-        run: pnpm test -- --passWithNoTests
+        run: pnpm exec jest --passWithNoTests
