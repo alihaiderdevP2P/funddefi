@@ -62,17 +62,39 @@ CREATE INDEX IF NOT EXISTS idx_moderation_reports_campaign_id ON moderation_repo
 CREATE INDEX IF NOT EXISTS idx_users_is_suspended ON users(is_suspended);
 `;
 
+function buildConfig() {
+  if (process.env.DATABASE_URL) {
+    return {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    };
+  }
+
+  const host = process.env.DB_HOST || "localhost";
+  const isSupabase =
+    host.includes("supabase") || Boolean(process.env.SUPABASE_URL);
+
+  return {
+    host,
+    port: Number.parseInt(process.env.DB_PORT || "5432", 10),
+    user: process.env.DB_USERNAME || process.env.DB_USER || "postgres",
+    password: process.env.DB_PASSWORD || "password",
+    database: process.env.DB_NAME || "crowdfunding",
+    ssl:
+      process.env.DB_SSL === "true" || isSupabase
+        ? { rejectUnauthorized: false }
+        : false,
+  };
+}
+
 async function main() {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
-    console.error("DATABASE_URL is not set in .env");
+  const config = buildConfig();
+  if (!config.connectionString && !process.env.DB_HOST && !process.env.DB_PASSWORD) {
+    console.error("Set DATABASE_URL or DB_HOST/DB_* in .env");
     process.exit(1);
   }
 
-  const client = new Client({
-    connectionString,
-    ssl: { rejectUnauthorized: false },
-  });
+  const client = new Client(config);
 
   try {
     await client.connect();
@@ -81,7 +103,7 @@ async function main() {
     console.log("Migration applied successfully.");
     console.log("  - users.is_suspended");
     console.log("  - moderation_reports table");
-    console.log("Restart is not required; try logging in again.");
+    console.log("Restart is not required; try registering/logging in again.");
   } catch (err) {
     console.error("Migration failed:", err.message);
     process.exit(1);

@@ -28,6 +28,7 @@
     "db:seed:careers": "node scripts/seed-careers.js",
     "db:seed:blog": "node scripts/seed-blog-posts.js",
     "db:migrate:newsletter": "node scripts/apply-newsletter-migration.js",
+    "db:migrate:storage": "node scripts/apply-storage-migration.js",
     "storage:setup": "node scripts/setup-storage-bucket.js",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",

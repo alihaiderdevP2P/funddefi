@@ -54,6 +54,9 @@ async function main() {
       "image/png",
       "image/webp",
       "image/gif",
+      "application/pdf",
+      "application/msword",
+      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     ],
   });
 

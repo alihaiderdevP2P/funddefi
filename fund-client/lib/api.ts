@@ -220,6 +220,7 @@ export const authAPI = {
     walletAddress?: string;
     avatar?: string;
     bio?: string;
+    role?: "user" | "admin" | "superadmin";
   }) => {
     const response = await api.post("/auth/register", userData);
     return response.data;

@@ -4,6 +4,7 @@ import {
   BadRequestException,
   Inject,
   forwardRef,
+  Logger,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { In, Repository } from "typeorm";
@@ -13,8 +14,19 @@ import { CreateFundingDto } from "./dto/create-funding.dto";
 import { UpdateFundingDto } from "./dto/update-funding.dto";
 import { WebsocketGateway } from "../websocket/websocket.gateway";
 
+function toIsoTimestamp(value: Date | string | null | undefined): string {
+  if (!value) return new Date(0).toISOString();
+  if (value instanceof Date) return value.toISOString();
+  const parsed = new Date(value);
+  return Number.isNaN(parsed.getTime())
+    ? new Date(0).toISOString()
+    : parsed.toISOString();
+}
+
 @Injectable()
 export class FundingService {
+  private readonly logger = new Logger(FundingService.name);
+
   constructor(
     @InjectRepository(Funding)
     private fundingRepository: Repository<Funding>,
@@ -187,10 +199,29 @@ export class FundingService {
   }
 
   async getUserDashboard(userId: string) {
+    try {
+      return await this.buildUserDashboard(userId);
+    } catch (error) {
+      this.logger.error(
+        `getUserDashboard failed for user ${userId}`,
+        error instanceof Error ? error.stack : String(error)
+      );
+      throw error;
+    }
+  }
+
+  private async buildUserDashboard(userId: string) {
     const [myFundings, myCampaigns, recentUpdates] = await Promise.all([
       this.getFundingsByUser(userId),
       this.campaignsService.getCampaignsByCreator(userId),
-      this.campaignsService.getUpdatesByCreator(userId, 10),
+      this.campaignsService.getUpdatesByCreator(userId, 10).catch((err) => {
+        this.logger.warn(
+          `getUpdatesByCreator failed (returning []): ${
+            err instanceof Error ? err.message : String(err)
+          }`
+        );
+        return [];
+      }),
     ]);
 
     const confirmedFundings = myFundings.filter(
@@ -310,13 +341,13 @@ export class FundingService {
       community: "#06b6d4",
       education: "#a855f7",
     };
-    const categoryDistribution = Array.from(categoryMap.entries()).map(
-      ([name, value]) => ({
+    const categoryDistribution = Array.from(categoryMap.entries())
+      .filter(([name]) => Boolean(name))
+      .map(([name, value]) => ({
         name: name.charAt(0).toUpperCase() + name.slice(1),
         value: Math.round(value * 10000) / 10000,
         color: categoryColors[name] || "#6b7280",
-      })
-    );
+      }));
 
     const campaignPerformance = myCampaigns.map((c) => ({
       id: c.id,
@@ -407,7 +438,7 @@ export class FundingService {
         campaign: f.campaign?.title || "Campaign",
         campaignId: f.campaignId,
         amount: Number(f.amount),
-        timestamp: f.createdAt.toISOString(),
+        timestamp: toIsoTimestamp(f.createdAt),
       });
     }
     for (const u of recentUpdates) {
@@ -417,7 +448,7 @@ export class FundingService {
         campaign: campaign?.title || "Campaign",
         campaignId: u.campaignId,
         amount: null,
-        timestamp: u.createdAt.toISOString(),
+        timestamp: toIsoTimestamp(u.createdAt),
       });
     }
     recentActivity.sort(

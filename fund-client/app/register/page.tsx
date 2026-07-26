@@ -24,6 +24,7 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
     walletAddress: "",
+    role: "user" as "user" | "admin" | "superadmin",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -60,8 +61,11 @@ export default function RegisterPage() {
         email: formData.email,
         password: formData.password,
         walletAddress: formData.walletAddress || undefined,
+        role: formData.role,
       });
-      router.push("/campaigns");
+      router.push(
+        formData.role === "user" ? "/campaigns" : "/admin"
+      );
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
     } finally {
@@ -141,6 +145,23 @@ export default function RegisterPage() {
                 />
                 <p className="text-xs text-muted-foreground">
                   You can add your wallet address later in your profile
+                </p>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="role">Register as</Label>
+                <select
+                  id="role"
+                  value={formData.role}
+                  onChange={(e) => handleChange("role", e.target.value)}
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                >
+                  <option value="user">User (client)</option>
+                  <option value="admin">Admin</option>
+                  <option value="superadmin">Superadmin</option>
+                </select>
+                <p className="text-xs text-muted-foreground">
+                  Clients use User. Admin and Superadmin get dashboard access.
                 </p>
               </div>
 

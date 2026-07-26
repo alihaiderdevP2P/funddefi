@@ -95,13 +95,24 @@ export class AuthService {
       );
     }
 
-    // Force role to "user" - admin/superadmin cannot be created through registration
-    const userData = {
-      ...registerDto,
-      role: "user" as const, // Always set to "user" regardless of any input
-    };
+    const role = registerDto.role || "user";
 
-    const user = await this.usersService.create(userData);
+    if (role === "superadmin") {
+      const allUsers = await this.usersService.findAll();
+      const superadminCount = allUsers.filter(
+        (u) => u.role === "superadmin"
+      ).length;
+      if (superadminCount >= 3) {
+        throw new BadRequestException(
+          "Maximum of 3 superadmin accounts allowed"
+        );
+      }
+    }
+
+    const user = await this.usersService.create({
+      ...registerDto,
+      role,
+    });
     const { password, ...result } = user;
 
     const payload = { email: user.email, sub: user.id, role: user.role };

@@ -1,13 +1,13 @@
 /**
- * Applies blog newsletter subscribers schema.
- * Run: npm run db:migrate:newsletter
+ * Shared DB connection config for migration scripts.
+ * Supports DATABASE_URL or DB_HOST/DB_* from .env.
  */
 const fs = require("fs");
 const path = require("path");
-const { Client } = require("pg");
 
-const envPath = path.join(__dirname, "..", ".env");
-if (fs.existsSync(envPath)) {
+function loadEnv() {
+  const envPath = path.join(__dirname, "..", ".env");
+  if (!fs.existsSync(envPath)) return;
   for (const line of fs.readFileSync(envPath, "utf8").split("\n")) {
     const trimmed = line.trim();
     if (!trimmed || trimmed.startsWith("#")) continue;
@@ -25,16 +25,9 @@ if (fs.existsSync(envPath)) {
   }
 }
 
-const sqlPath = path.join(
-  __dirname,
-  "..",
-  "database",
-  "migrations",
-  "add_blog_newsletter.sql"
-);
-const sql = fs.readFileSync(sqlPath, "utf8");
-
 function buildConfig() {
+  loadEnv();
+
   if (process.env.DATABASE_URL) {
     return {
       connectionString: process.env.DATABASE_URL,
@@ -59,28 +52,15 @@ function buildConfig() {
   };
 }
 
-async function main() {
-  const config = buildConfig();
-  if (!config.connectionString && !process.env.DB_HOST && !process.env.DB_PASSWORD) {
+function assertConfig(config) {
+  if (
+    !config.connectionString &&
+    !process.env.DB_HOST &&
+    !process.env.DB_PASSWORD
+  ) {
     console.error("Set DATABASE_URL or DB_HOST/DB_* in .env");
     process.exit(1);
   }
-
-  const client = new Client(config);
-
-  try {
-    await client.connect();
-    console.log("Connected. Applying newsletter migration...");
-    await client.query(sql);
-    console.log("Newsletter migration applied successfully.");
-    console.log("  - newsletter_status enum");
-    console.log("  - blog_newsletter_subscribers table");
-  } catch (err) {
-    console.error("Migration failed:", err.message);
-    process.exit(1);
-  } finally {
-    await client.end();
-  }
 }
 
-main();
+module.exports = { loadEnv, buildConfig, assertConfig };

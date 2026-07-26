@@ -34,17 +34,39 @@ const sqlPath = path.join(
 );
 const sql = fs.readFileSync(sqlPath, "utf8");
 
+function buildConfig() {
+  if (process.env.DATABASE_URL) {
+    return {
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false },
+    };
+  }
+
+  const host = process.env.DB_HOST || "localhost";
+  const isSupabase =
+    host.includes("supabase") || Boolean(process.env.SUPABASE_URL);
+
+  return {
+    host,
+    port: Number.parseInt(process.env.DB_PORT || "5432", 10),
+    user: process.env.DB_USERNAME || process.env.DB_USER || "postgres",
+    password: process.env.DB_PASSWORD || "password",
+    database: process.env.DB_NAME || "crowdfunding",
+    ssl:
+      process.env.DB_SSL === "true" || isSupabase
+        ? { rejectUnauthorized: false }
+        : false,
+  };
+}
+
 async function main() {
-  const connectionString = process.env.DATABASE_URL;
-  if (!connectionString) {
-    console.error("DATABASE_URL is not set in .env");
+  const config = buildConfig();
+  if (!config.connectionString && !process.env.DB_HOST && !process.env.DB_PASSWORD) {
+    console.error("Set DATABASE_URL or DB_HOST/DB_* in .env");
     process.exit(1);
   }
 
-  const client = new Client({
-    connectionString,
-    ssl: { rejectUnauthorized: false },
-  });
+  const client = new Client(config);
 
   try {
     await client.connect();
