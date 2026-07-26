@@ -1,0 +1,108 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  client:
+    name: Client (lint + build)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fund-client
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect client changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            client:
+              - 'fund-client/**'
+              - '.github/workflows/**'
+
+      - name: Setup Node.js
+        if: steps.filter.outputs.client == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: fund-client/package-lock.json
+
+      - name: Install dependencies
+        if: steps.filter.outputs.client == 'true'
+        run: npm ci
+
+      - name: Lint
+        if: steps.filter.outputs.client == 'true'
+        run: npm run lint
+
+      # Placeholder env only — no real secrets. Build needs public URLs at compile time.
+      - name: Build
+        if: steps.filter.outputs.client == 'true'
+        env:
+          NEXT_PUBLIC_API_URL: http://localhost:3001/api
+          NEXT_PUBLIC_WS_URL: http://localhost:3001
+          BACKEND_URL: http://localhost:3001/api
+          NEXT_PUBLIC_LANG_DEFAULT: en
+          NEXT_PUBLIC_LANG_FALLBACK: en
+          NEXT_PUBLIC_FACTORY_ADDRESS: "0x0000000000000000000000000000000000000000"
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: placeholder-anon-key
+          GEMINI_API_KEY: placeholder-gemini-key
+        run: npm run build
+
+  server:
+    name: Server (build + test)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: fund-server
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Detect server changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            server:
+              - 'fund-server/**'
+              - '.github/workflows/**'
+
+      - name: Setup pnpm
+        if: steps.filter.outputs.server == 'true'
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        if: steps.filter.outputs.server == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+          cache-dependency-path: fund-server/pnpm-lock.yaml
+
+      - name: Install dependencies
+        if: steps.filter.outputs.server == 'true'
+        run: pnpm install --frozen-lockfile
+
+      - name: Build
+        if: steps.filter.outputs.server == 'true'
+        run: pnpm run build
+
+      # No unit tests yet — --passWithNoTests keeps CI green until specs exist.
+      - name: Test
+        if: steps.filter.outputs.server == 'true'
+        run: pnpm test -- --passWithNoTests

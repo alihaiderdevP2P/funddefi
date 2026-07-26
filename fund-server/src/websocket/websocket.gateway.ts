@@ -21,7 +21,7 @@ interface AuthenticatedSocket extends Socket {
   };
 }
 
-const websocketAllowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,https://funddefi-client.vercel.app")
+const websocketAllowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,https://funddefi-client-six.vercel.app")
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);

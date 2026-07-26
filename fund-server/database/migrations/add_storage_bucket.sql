@@ -1,5 +1,8 @@
 -- Public storage bucket for all images/documents (campaigns, blog, resumes, etc.)
 -- Run: npm run db:migrate:storage
+--
+-- Bucket is public so getPublicUrl works without a broad SELECT listing policy.
+-- Uploads go through NestJS with SUPABASE_SERVICE_ROLE_KEY (bypasses RLS).
 
 INSERT INTO storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 VALUES (
@@ -22,33 +25,8 @@ ON CONFLICT (id) DO UPDATE SET
   file_size_limit = EXCLUDED.file_size_limit,
   allowed_mime_types = EXCLUDED.allowed_mime_types;
 
--- Public read (needed for getPublicUrl)
+-- Remove broad policies: listing + public write are unnecessary and expose the bucket.
 DROP POLICY IF EXISTS "Public read campaign-images" ON storage.objects;
-CREATE POLICY "Public read campaign-images"
-  ON storage.objects
-  FOR SELECT
-  TO public
-  USING (bucket_id = 'campaign-images');
-
--- Authenticated / anon upload (service role bypasses RLS; these cover client uploads if used)
 DROP POLICY IF EXISTS "Anyone can upload campaign-images" ON storage.objects;
-CREATE POLICY "Anyone can upload campaign-images"
-  ON storage.objects
-  FOR INSERT
-  TO public
-  WITH CHECK (bucket_id = 'campaign-images');
-
 DROP POLICY IF EXISTS "Anyone can update campaign-images" ON storage.objects;
-CREATE POLICY "Anyone can update campaign-images"
-  ON storage.objects
-  FOR UPDATE
-  TO public
-  USING (bucket_id = 'campaign-images')
-  WITH CHECK (bucket_id = 'campaign-images');
-
 DROP POLICY IF EXISTS "Anyone can delete campaign-images" ON storage.objects;
-CREATE POLICY "Anyone can delete campaign-images"
-  ON storage.objects
-  FOR DELETE
-  TO public
-  USING (bucket_id = 'campaign-images');
