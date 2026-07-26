@@ -1,11 +1,11 @@
 const LOCALHOST_PATTERN = /localhost|127\.0\.0\.1/;
 
-/** Backend API base URL from env (e.g. https://api.example.com/api). */
+/** Backend API base URL from env (e.g. https://api.example.com/api/v1). */
 export function getBackendApiUrl(): string {
   return (
     process.env.BACKEND_URL ||
     process.env.NEXT_PUBLIC_API_URL ||
-    "http://localhost:3001/api"
+    "http://localhost:3001/api/v1"
   ).replace(/\/$/, "");
 }
 

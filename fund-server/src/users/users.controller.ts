@@ -114,17 +114,15 @@ export class UsersController {
       throw new ForbiddenException("Only superadmin can create admin accounts");
     }
 
-    // Prevent creating superadmin (only should be 2-3 specific accounts)
-    if (createAdminDto.role === "superadmin") {
-      // Check how many superadmins exist
-      const allUsers = await this.usersService.findAll();
-      const superadminCount = allUsers.filter(
-        (u) => u.role === "superadmin"
-      ).length;
-
-      if (superadminCount >= 3) {
+    // Max 3 accounts each for admin and superadmin
+    if (
+      createAdminDto.role === "admin" ||
+      createAdminDto.role === "superadmin"
+    ) {
+      const count = await this.usersService.countByRole(createAdminDto.role);
+      if (count >= UsersService.MAX_PRIVILEGED_ROLE) {
         throw new ForbiddenException(
-          "Maximum of 3 superadmin accounts allowed. Cannot create more."
+          `Maximum of ${UsersService.MAX_PRIVILEGED_ROLE} ${createAdminDto.role} accounts allowed. Cannot create more.`
         );
       }
     }
@@ -158,19 +156,18 @@ export class UsersController {
       throw new ForbiddenException("Only superadmin can change user roles");
     }
 
-    // Prevent creating too many superadmins
-    if (updateRoleDto.role === "superadmin") {
-      const allUsers = await this.usersService.findAll();
-      const superadminCount = allUsers.filter(
-        (u) => u.role === "superadmin"
-      ).length;
-
+    // Max 3 accounts each for admin and superadmin
+    if (
+      updateRoleDto.role === "admin" ||
+      updateRoleDto.role === "superadmin"
+    ) {
+      const count = await this.usersService.countByRole(updateRoleDto.role);
       const currentUser = await this.usersService.findOne(id);
-      const isAlreadySuperadmin = currentUser.role === "superadmin";
+      const alreadyHasRole = currentUser.role === updateRoleDto.role;
 
-      if (!isAlreadySuperadmin && superadminCount >= 3) {
+      if (!alreadyHasRole && count >= UsersService.MAX_PRIVILEGED_ROLE) {
         throw new ForbiddenException(
-          "Maximum of 3 superadmin accounts allowed. Cannot promote user to superadmin."
+          `Maximum of ${UsersService.MAX_PRIVILEGED_ROLE} ${updateRoleDto.role} accounts allowed. Cannot promote user to ${updateRoleDto.role}.`
         );
       }
     }

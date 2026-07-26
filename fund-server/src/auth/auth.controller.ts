@@ -52,6 +52,17 @@ export class AuthController {
     return this.authService.register(registerDto, locale);
   }
 
+  @Get("role-availability")
+  @ApiOperation({
+    summary: "Get whether admin/superadmin roles can still be registered",
+    description:
+      "Public endpoint. Max 3 accounts each for admin and superadmin. Used by register page to hide dropdown options.",
+  })
+  @ApiResponse({ status: 200, description: "Role availability retrieved" })
+  getRoleAvailability() {
+    return this.authService.getRoleAvailability();
+  }
+
   @Get("profile")
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()

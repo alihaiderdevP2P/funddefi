@@ -121,6 +121,9 @@ export interface CreatedCampaignView {
   conversionRate: number;
   avgPledge: number;
   rewards: Campaign["rewards"];
+  contractAddress?: string;
+  endDate: string;
+  canWithdraw: boolean;
 }
 
 export function campaignToCreatedView(
@@ -142,16 +145,26 @@ export function campaignToCreatedView(
         ? raised / backers
         : 0;
 
+  const daysLeft = getDaysLeft(campaign.endDate);
+  const status = mapCampaignStatus(campaign.status);
+  const goalMet = goal > 0 && raised >= goal;
+  const canWithdraw =
+    Boolean(campaign.contractAddress) &&
+    goalMet &&
+    (daysLeft === 0 || status === "funded") &&
+    status !== "cancelled" &&
+    status !== "draft";
+
   return {
     id: campaign.id,
     title: campaign.title,
     description: campaign.description,
-    status: mapCampaignStatus(campaign.status),
+    status,
     progress: calcFundingProgress(raised, goal),
     raised,
     goal,
     backers,
-    daysLeft: getDaysLeft(campaign.endDate),
+    daysLeft,
     image: campaign.imageUrl || "/placeholder.svg",
     lastUpdate: campaign.updatedAt,
     views,
@@ -159,6 +172,9 @@ export function campaignToCreatedView(
       views > 0 ? Math.round((backers / views) * 1000) / 10 : 0,
     avgPledge: Math.round(avgPledge * 10000) / 10000,
     rewards: campaign.rewards || [],
+    contractAddress: campaign.contractAddress,
+    endDate: campaign.endDate,
+    canWithdraw,
   };
 }
 

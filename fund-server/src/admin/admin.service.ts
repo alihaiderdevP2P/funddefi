@@ -108,7 +108,15 @@ export class AdminService {
           ? 100
           : 0;
 
-    const platformFees = fundingStats.totalAmount * 0.05;
+    const feeBps = Math.min(
+      1000,
+      Math.max(
+        0,
+        Number(process.env.PLATFORM_FEE_BPS ?? process.env.NEXT_PUBLIC_PLATFORM_FEE_BPS ?? 500) ||
+          500
+      )
+    );
+    const platformFees = fundingStats.totalAmount * (feeBps / 10000);
 
     return {
       totalUsers,

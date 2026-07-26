@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,9 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TrendingUp, Eye, EyeOff } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
+import { authAPI } from "@/lib/api";
+
+type RegisterRole = "user" | "admin" | "superadmin";
 
 export default function RegisterPage() {
   const [formData, setFormData] = useState({
@@ -24,14 +27,44 @@ export default function RegisterPage() {
     password: "",
     confirmPassword: "",
     walletAddress: "",
-    role: "user" as "user" | "admin" | "superadmin",
+    role: "user" as RegisterRole,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [adminAvailable, setAdminAvailable] = useState(true);
+  const [superadminAvailable, setSuperadminAvailable] = useState(true);
   const { register } = useAuth();
   const router = useRouter();
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await authAPI.getRoleAvailability();
+        if (cancelled) return;
+        setAdminAvailable(data.admin.available);
+        setSuperadminAvailable(data.superadmin.available);
+        setFormData((prev) => {
+          if (
+            (prev.role === "admin" && !data.admin.available) ||
+            (prev.role === "superadmin" && !data.superadmin.available)
+          ) {
+            return { ...prev, role: "user" };
+          }
+          return prev;
+        });
+      } catch {
+        // If API fails, keep options visible; backend still enforces the limit
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const showRoleDropdown = adminAvailable || superadminAvailable;
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -63,9 +96,7 @@ export default function RegisterPage() {
         walletAddress: formData.walletAddress || undefined,
         role: formData.role,
       });
-      router.push(
-        formData.role === "user" ? "/campaigns" : "/admin"
-      );
+      router.push(formData.role === "user" ? "/campaigns" : "/admin");
     } catch (err: any) {
       setError(err.message || "Registration failed. Please try again.");
     } finally {
@@ -148,22 +179,27 @@ export default function RegisterPage() {
                 </p>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="role">Register as</Label>
-                <select
-                  id="role"
-                  value={formData.role}
-                  onChange={(e) => handleChange("role", e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                >
-                  <option value="user">User (client)</option>
-                  <option value="admin">Admin</option>
-                  <option value="superadmin">Superadmin</option>
-                </select>
-                <p className="text-xs text-muted-foreground">
-                  Clients use User. Admin and Superadmin get dashboard access.
-                </p>
-              </div>
+              {showRoleDropdown && (
+                <div className="space-y-2">
+                  <Label htmlFor="role">Register as</Label>
+                  <select
+                    id="role"
+                    value={formData.role}
+                    onChange={(e) => handleChange("role", e.target.value)}
+                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  >
+                    <option value="user">User (client)</option>
+                    {adminAvailable && <option value="admin">Admin</option>}
+                    {superadminAvailable && (
+                      <option value="superadmin">Superadmin</option>
+                    )}
+                  </select>
+                  <p className="text-xs text-muted-foreground">
+                    Clients use User. Admin and Superadmin get dashboard access
+                    (max 3 each).
+                  </p>
+                </div>
+              )}
 
               <div className="space-y-2">
                 <Label htmlFor="password">Password</Label>

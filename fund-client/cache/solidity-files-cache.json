@@ -2,8 +2,8 @@
   "_format": "hh-sol-cache-2",
   "files": {
     "C:\\ali\\defi\\funddefi\\fund-client\\contracts\\Campaign.sol": {
-      "lastModificationDate": 1784999251721,
-      "contentHash": "16e0f44a6423f7c029a25d39ef486378",
+      "lastModificationDate": 1785026273002,
+      "contentHash": "3d8163a71f51e47a623b32ab4b907927",
       "sourceName": "contracts/Campaign.sol",
       "solcConfig": {
         "version": "0.8.19",
@@ -37,8 +37,8 @@
       ]
     },
     "C:\\ali\\defi\\funddefi\\fund-client\\contracts\\CrowdfundingFactory.sol": {
-      "lastModificationDate": 1784999251722,
-      "contentHash": "7bab0da9ab510239f0caad1f38b42925",
+      "lastModificationDate": 1785026274669,
+      "contentHash": "f6e5264457fa2a5b49a3fedeee2e6f69",
       "sourceName": "contracts/CrowdfundingFactory.sol",
       "solcConfig": {
         "version": "0.8.19",

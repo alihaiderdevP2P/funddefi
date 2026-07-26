@@ -8,12 +8,17 @@ export class AppController {
       message: "🚀 FundFlow API Server",
       version: "1.0.0",
       status: "running",
-      documentation: "/api/docs",
+      documentation: {
+        all: "/docs",
+        user: "/docs/user",
+        admin: "/docs/admin",
+        superadmin: "/docs/superadmin",
+      },
       endpoints: {
-        auth: "/api/auth",
-        users: "/api/users",
-        campaigns: "/api/campaigns",
-        funding: "/api/funding",
+        auth: "/api/v1/auth",
+        users: "/api/v1/users",
+        campaigns: "/api/v1/campaigns",
+        funding: "/api/v1/funding",
       },
       timestamp: new Date().toISOString(),
     };

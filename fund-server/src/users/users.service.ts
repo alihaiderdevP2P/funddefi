@@ -69,6 +69,13 @@ export class UsersService {
     });
   }
 
+  /** Max accounts allowed per privileged role (admin / superadmin). */
+  static readonly MAX_PRIVILEGED_ROLE = 3;
+
+  async countByRole(role: "user" | "admin" | "superadmin"): Promise<number> {
+    return this.usersRepository.count({ where: { role } });
+  }
+
   async findOne(id: string): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
