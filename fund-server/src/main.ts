@@ -10,7 +10,7 @@ async function createApp() {
 
   const allowedOrigins = (
     process.env.CORS_ORIGINS ||
-    "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://funddefi-client.vercel.app"
+    "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://funddefi-client-six.vercel.app"
   )
     .split(",")
     .map((origin) => origin.trim())
