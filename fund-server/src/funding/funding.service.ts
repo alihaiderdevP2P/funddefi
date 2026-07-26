@@ -13,6 +13,7 @@ import { CampaignsService } from "../campaigns/campaigns.service";
 import { CreateFundingDto } from "./dto/create-funding.dto";
 import { UpdateFundingDto } from "./dto/update-funding.dto";
 import { WebsocketGateway } from "../websocket/websocket.gateway";
+import { NotificationsService } from "../notifications/notifications.service";
 
 function toIsoTimestamp(value: Date | string | null | undefined): string {
   if (!value) return new Date(0).toISOString();
@@ -33,7 +34,9 @@ export class FundingService {
     @Inject(forwardRef(() => CampaignsService))
     private campaignsService: CampaignsService,
     @Inject(forwardRef(() => WebsocketGateway))
-    private websocketGateway: WebsocketGateway
+    private websocketGateway: WebsocketGateway,
+    @Inject(forwardRef(() => NotificationsService))
+    private notificationsService: NotificationsService
   ) {}
 
   async create(
@@ -77,6 +80,8 @@ export class FundingService {
           backerInfo: savedFunding.backerInfo,
         }
       );
+
+      await this.notifyCreatorOfFunding(campaign, savedFunding, userId);
     }
 
     return this.findOne(savedFunding.id);
@@ -126,10 +131,37 @@ export class FundingService {
         message: funding.message,
         backerInfo: funding.backerInfo,
       });
+
+      const campaign = await this.campaignsService.findOne(funding.campaignId);
+      await this.notifyCreatorOfFunding(campaign, funding, funding.userId);
     }
 
     await this.fundingRepository.update(id, updateFundingDto);
     return this.findOne(id);
+  }
+
+  private async notifyCreatorOfFunding(
+    campaign: { creatorId: string; id: string; title: string },
+    funding: Funding,
+    _backerUserId: string
+  ) {
+    try {
+      await this.notificationsService.notifyFundingAlert({
+        creatorId: campaign.creatorId,
+        campaignId: campaign.id,
+        campaignTitle: campaign.title,
+        amount: funding.amount,
+        fundingId: funding.id,
+        backerName:
+          funding.backerInfo?.name ||
+          funding.user?.name ||
+          undefined,
+      });
+    } catch (err) {
+      this.logger.warn(
+        `Failed to send funding notification: ${(err as Error).message}`
+      );
+    }
   }
 
   async getFundingsByCampaign(campaignId: string): Promise<Funding[]> {

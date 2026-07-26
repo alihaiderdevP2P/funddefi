@@ -22,6 +22,11 @@ import { CreateRewardDto } from "./dto/create-reward.dto";
 import { CreateCampaignUpdateDto } from "./dto/create-campaign-update.dto";
 import { WebsocketGateway } from "../websocket/websocket.gateway";
 import { I18nService } from "../i18n/i18n.service";
+import { NotificationsService } from "../notifications/notifications.service";
+import {
+  Funding,
+  FundingStatus,
+} from "../funding/entities/funding.entity";
 
 @Injectable()
 export class CampaignsService {
@@ -34,8 +39,12 @@ export class CampaignsService {
     private updatesRepository: Repository<CampaignUpdate>,
     @InjectRepository(SavedCampaign)
     private savedRepository: Repository<SavedCampaign>,
+    @InjectRepository(Funding)
+    private fundingRepository: Repository<Funding>,
     @Inject(forwardRef(() => WebsocketGateway))
     private websocketGateway: WebsocketGateway,
+    @Inject(forwardRef(() => NotificationsService))
+    private notificationsService: NotificationsService,
     private i18nService: I18nService
   ) {}
 
@@ -60,6 +69,23 @@ export class CampaignsService {
         })
       );
       await this.rewardsRepository.save(rewards);
+    }
+
+    try {
+      await this.notificationsService.create({
+        userId: creatorId,
+        type: "system",
+        title: "Campaign created",
+        message: `“${savedCampaign.title}” was saved as a draft. Publish it when you’re ready.`,
+        data: {
+          campaignId: savedCampaign.id,
+          link: `/campaigns/${savedCampaign.id}`,
+        },
+        channel: "both",
+        showPopup: true,
+      });
+    } catch {
+      // non-blocking
     }
 
     return this.findOne(savedCampaign.id);
@@ -340,7 +366,36 @@ export class CampaignsService {
       campaignId,
       authorId: userId,
     });
-    return this.updatesRepository.save(update);
+    const saved = await this.updatesRepository.save(update);
+
+    try {
+      const fundings = await this.fundingRepository.find({
+        where: {
+          campaignId,
+          status: FundingStatus.CONFIRMED,
+        },
+        select: ["userId"],
+      });
+      const backerIds = [
+        ...new Set(
+          fundings.map((f) => f.userId).filter((id) => id && id !== userId)
+        ),
+      ];
+
+      if (backerIds.length > 0) {
+        await this.notificationsService.notifyCampaignUpdate({
+          backerIds,
+          campaignId,
+          campaignTitle: campaign.title,
+          updateTitle: saved.title,
+          updateId: saved.id,
+        });
+      }
+    } catch {
+      // non-blocking
+    }
+
+    return saved;
   }
 
   async saveCampaign(campaignId: string, userId: string): Promise<{ saved: true }> {

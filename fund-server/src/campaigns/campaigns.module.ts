@@ -7,11 +7,20 @@ import { Reward } from "./entities/reward.entity";
 import { CampaignUpdate } from "./entities/campaign-update.entity";
 import { SavedCampaign } from "./entities/saved-campaign.entity";
 import { WebsocketModule } from "../websocket/websocket.module";
+import { NotificationsModule } from "../notifications/notifications.module";
+import { Funding } from "../funding/entities/funding.entity";
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Campaign, Reward, CampaignUpdate, SavedCampaign]),
+    TypeOrmModule.forFeature([
+      Campaign,
+      Reward,
+      CampaignUpdate,
+      SavedCampaign,
+      Funding,
+    ]),
     forwardRef(() => WebsocketModule),
+    forwardRef(() => NotificationsModule),
   ],
   controllers: [CampaignsController],
   providers: [CampaignsService],

@@ -9,11 +9,13 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
 import { LocalStrategy } from "./strategies/local.strategy";
 import { RolesGuard } from "./guards/roles.guard";
 import { SessionService } from "./session.service";
+import { NotificationsModule } from "../notifications/notifications.module";
 
 @Module({
   imports: [
     UsersModule,
     PassportModule,
+    NotificationsModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
       useFactory: async (configService: ConfigService) => ({

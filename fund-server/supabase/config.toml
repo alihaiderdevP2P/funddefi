@@ -1,0 +1,10 @@
+# Supabase config for FundFlow edge functions
+# From fund-server/:
+#   npx supabase functions deploy campaign-digest --project-ref nkwvphdtvfcwdeqocupj
+#   npx supabase functions deploy notifications --project-ref nkwvphdtvfcwdeqocupj
+
+[functions.notifications]
+verify_jwt = false
+
+[functions.campaign-digest]
+verify_jwt = false

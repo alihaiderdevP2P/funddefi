@@ -47,6 +47,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useI18n } from "@/hooks/use-i18n";
 import type { SupportedLocale } from "@/lib/i18n/i18n";
 import { uploadProfileImage } from "@/lib/upload-image";
+import { notificationsAPI } from "@/lib/api";
 import {
   Select,
   SelectContent,
@@ -134,15 +135,37 @@ export default function SettingsPage() {
   }, [isAuthenticated, router]);
 
   useEffect(() => {
-    try {
-      const savedNotifications = localStorage.getItem(NOTIFICATION_PREFS_KEY);
-      if (savedNotifications) {
-        setNotifications(JSON.parse(savedNotifications));
+    if (!isAuthenticated) return;
+
+    let cancelled = false;
+    (async () => {
+      try {
+        const prefs = await notificationsAPI.getPreferences();
+        if (!cancelled) {
+          setNotifications({
+            emailNotifications: prefs.emailNotifications,
+            campaignUpdates: prefs.campaignUpdates,
+            fundingAlerts: prefs.fundingAlerts,
+            marketingEmails: prefs.marketingEmails,
+          });
+          localStorage.setItem(NOTIFICATION_PREFS_KEY, JSON.stringify(prefs));
+        }
+      } catch {
+        try {
+          const savedNotifications = localStorage.getItem(NOTIFICATION_PREFS_KEY);
+          if (savedNotifications && !cancelled) {
+            setNotifications(JSON.parse(savedNotifications));
+          }
+        } catch {
+          // ignore invalid stored notification preferences
+        }
       }
-    } catch {
-      // ignore invalid stored notification preferences
-    }
-  }, []);
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [isAuthenticated]);
 
   useEffect(() => {
     if (!themeMounted || preferencesLoadedRef.current) return;
@@ -412,10 +435,9 @@ export default function SettingsPage() {
     try {
       setLoading(true);
 
-      localStorage.setItem(
-        NOTIFICATION_PREFS_KEY,
-        JSON.stringify(notifications)
-      );
+      const saved = await notificationsAPI.updatePreferences(notifications);
+      setNotifications(saved);
+      localStorage.setItem(NOTIFICATION_PREFS_KEY, JSON.stringify(saved));
 
       toast({
         title: "Notifications Updated",
@@ -424,7 +446,10 @@ export default function SettingsPage() {
     } catch (error) {
       toast({
         title: "Update Failed",
-        description: "Failed to update notification preferences",
+        description:
+          error instanceof Error
+            ? error.message
+            : "Failed to update notification preferences",
         variant: "destructive",
       });
     } finally {

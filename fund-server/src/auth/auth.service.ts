@@ -12,6 +12,7 @@ import { LoginDto } from "./dto/login.dto";
 import { RegisterDto } from "./dto/register.dto";
 import { ChangePasswordDto } from "./dto/change-password.dto";
 import * as bcrypt from "bcryptjs";
+import { NotificationsService } from "../notifications/notifications.service";
 
 @Injectable()
 export class AuthService {
@@ -19,7 +20,8 @@ export class AuthService {
     private usersService: UsersService,
     private jwtService: JwtService,
     private sessionService: SessionService,
-    private i18nService: I18nService
+    private i18nService: I18nService,
+    private notificationsService: NotificationsService
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -120,6 +122,12 @@ export class AuthService {
 
     // Create session for new user
     this.sessionService.createSession(user.email, user.id, access_token);
+
+    try {
+      await this.notificationsService.notifyWelcome(user.id, user.name);
+    } catch {
+      // non-blocking
+    }
 
     return {
       access_token,

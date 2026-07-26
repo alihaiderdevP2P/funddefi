@@ -432,4 +432,63 @@ export const usersAPI = {
   },
 };
 
+// Notifications API (prefs + inbox; backed by Supabase edge function)
+export type NotificationPreferences = {
+  emailNotifications: boolean;
+  campaignUpdates: boolean;
+  fundingAlerts: boolean;
+  marketingEmails: boolean;
+};
+
+export type AppNotification = {
+  id: string;
+  userId: string;
+  type:
+    | "funding_alert"
+    | "campaign_update"
+    | "marketing"
+    | "system"
+    | "welcome";
+  title: string;
+  message: string;
+  data?: Record<string, unknown>;
+  channel: "in_app" | "email" | "both";
+  showPopup: boolean;
+  emailSent: boolean;
+  isRead: boolean;
+  createdAt: string;
+};
+
+export const notificationsAPI = {
+  getPreferences: async (): Promise<NotificationPreferences> => {
+    const response = await api.get("/notifications/preferences");
+    return response.data;
+  },
+
+  updatePreferences: async (
+    prefs: Partial<NotificationPreferences>
+  ): Promise<NotificationPreferences> => {
+    const response = await api.patch("/notifications/preferences", prefs);
+    return response.data;
+  },
+
+  list: async (params?: { unreadOnly?: boolean; limit?: number }) => {
+    const response = await api.get("/notifications", { params });
+    return response.data as {
+      notifications: AppNotification[];
+      unreadCount: number;
+    };
+  },
+
+  markRead: async (id: string) => {
+    const response = await api.patch(`/notifications/${id}/read`);
+    return response.data;
+  },
+
+  markAllRead: async () => {
+    const response = await api.post("/notifications/read-all");
+    return response.data;
+  },
+};
+
 export default api;

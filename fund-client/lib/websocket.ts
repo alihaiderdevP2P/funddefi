@@ -117,6 +117,18 @@ class WebSocketService {
     this.socket?.on("global-notification", callback);
   }
 
+  onUserNotification(callback: (data: any) => void) {
+    this.socket?.on("user-notification", callback);
+  }
+
+  offUserNotification(callback?: (data: any) => void) {
+    if (callback) {
+      this.socket?.off("user-notification", callback);
+    } else {
+      this.socket?.off("user-notification");
+    }
+  }
+
   // Blog real-time
   joinBlogFeed() {
     this.socket?.emit("join-blog-feed", {});

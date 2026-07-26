@@ -115,3 +115,47 @@ CREATE TRIGGER update_rewards_updated_at BEFORE UPDATE ON rewards FOR EACH ROW E
 
 DROP TRIGGER IF EXISTS update_fundings_updated_at ON fundings;
 CREATE TRIGGER update_fundings_updated_at BEFORE UPDATE ON fundings FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Notifications (also applied via migrations/add_notifications.sql)
+DO $$ BEGIN
+  CREATE TYPE notification_type AS ENUM (
+    'funding_alert', 'campaign_update', 'marketing', 'system', 'welcome'
+  );
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+DO $$ BEGIN
+  CREATE TYPE notification_channel AS ENUM ('in_app', 'email', 'both');
+EXCEPTION WHEN duplicate_object THEN NULL;
+END $$;
+
+CREATE TABLE IF NOT EXISTS notification_preferences (
+  user_id UUID PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,
+  email_notifications BOOLEAN NOT NULL DEFAULT TRUE,
+  campaign_updates BOOLEAN NOT NULL DEFAULT TRUE,
+  funding_alerts BOOLEAN NOT NULL DEFAULT TRUE,
+  marketing_emails BOOLEAN NOT NULL DEFAULT FALSE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS notifications (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  type notification_type NOT NULL DEFAULT 'system',
+  title VARCHAR(255) NOT NULL,
+  message TEXT NOT NULL,
+  data JSONB DEFAULT '{}'::jsonb,
+  channel notification_channel NOT NULL DEFAULT 'both',
+  show_popup BOOLEAN NOT NULL DEFAULT TRUE,
+  email_sent BOOLEAN NOT NULL DEFAULT FALSE,
+  email_error TEXT,
+  is_read BOOLEAN NOT NULL DEFAULT FALSE,
+  read_at TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON notifications(user_id);
+CREATE INDEX IF NOT EXISTS idx_notifications_user_unread
+  ON notifications(user_id, is_read) WHERE is_read = FALSE;

@@ -14,6 +14,7 @@ import { BlogModule } from "./blog/blog.module";
 import { CareersModule } from "./careers/careers.module";
 import { SupportModule } from "./support/support.module";
 import { ContactModule } from "./contact/contact.module";
+import { NotificationsModule } from "./notifications/notifications.module";
 
 @Module({
   imports: [
@@ -56,6 +57,7 @@ import { ContactModule } from "./contact/contact.module";
     CareersModule,
     SupportModule,
     ContactModule,
+    NotificationsModule,
   ],
   controllers: [AppController],
 })

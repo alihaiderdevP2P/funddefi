@@ -1,0 +1,8 @@
+# Supabase local/project config for FundFlow edge functions
+# Deploy: npx supabase functions deploy notifications --project-ref nkwvphdtvfcwdeqocupj
+
+[functions.notifications]
+verify_jwt = false
+
+[functions.campaign-digest]
+verify_jwt = false

@@ -5,12 +5,14 @@ import { FundingController } from "./funding.controller";
 import { Funding } from "./entities/funding.entity";
 import { CampaignsModule } from "../campaigns/campaigns.module";
 import { WebsocketModule } from "../websocket/websocket.module";
+import { NotificationsModule } from "../notifications/notifications.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Funding]),
     forwardRef(() => CampaignsModule),
     forwardRef(() => WebsocketModule),
+    forwardRef(() => NotificationsModule),
   ],
   controllers: [FundingController],
   providers: [FundingService],

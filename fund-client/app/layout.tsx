@@ -7,6 +7,7 @@ import { I18nProvider } from "@/hooks/use-i18n";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ThemeInitializer } from "@/components/theme-initializer";
 import { Toaster } from "@/components/ui/toaster";
+import { NotificationListener } from "@/components/notification-listener";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -46,7 +47,10 @@ export default function RootLayout({
         >
           <ThemeInitializer />
           <I18nProvider>
-            <AuthProvider>{children}</AuthProvider>
+            <AuthProvider>
+              <NotificationListener />
+              {children}
+            </AuthProvider>
           </I18nProvider>
           <Toaster />
         </ThemeProvider>

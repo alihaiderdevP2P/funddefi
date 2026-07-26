@@ -168,6 +168,10 @@ export class WebsocketGateway
     @ConnectedSocket() client: AuthenticatedSocket
   ) {
     // Authentication is handled by the guard
+    if (client.user?.id) {
+      client.join(`user-${client.user.id}`);
+    }
+
     client.emit("authenticated", {
       message: "Successfully authenticated",
       userId: client.user?.id,
@@ -175,6 +179,30 @@ export class WebsocketGateway
 
     this.logger.log(
       `Client ${client.id} authenticated as user ${client.user?.id}`
+    );
+  }
+
+  /** Toast / popup notification for a specific user */
+  async sendUserNotification(
+    userId: string,
+    notification: {
+      id?: string;
+      type: string;
+      title: string;
+      message: string;
+      data?: any;
+      showPopup?: boolean;
+      createdAt?: Date | string;
+    }
+  ) {
+    this.server.to(`user-${userId}`).emit("user-notification", {
+      ...notification,
+      showPopup: notification.showPopup !== false,
+      timestamp: new Date().toISOString(),
+    });
+
+    this.logger.log(
+      `Sent user notification to ${userId}: ${notification.title}`
     );
   }
 
