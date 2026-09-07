@@ -592,7 +592,7 @@ npm run db:migrate:supabase # Creates Postgres tables (once)
 ```bash
 cd fund-fyp-main/fund-client
 npx hardhat run scripts/deploy.js --network sepolia
-# Copy deployed factory address to NEXT_PUBLIC_FACTORY_ADDRESS in .env
+# Copy deployed factory address to NEXT_PUBLIC_FACTORY_ADDRESS in 
 ```
 
 ### Supported Networks
