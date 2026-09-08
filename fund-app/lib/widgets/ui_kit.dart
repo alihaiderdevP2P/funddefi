@@ -9,37 +9,11 @@ class DotGridBackground extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = Theme.of(context).brightness == Brightness.dark;
-    return CustomPaint(
-      painter: _DotGridPainter(
-        color: dark
-            ? Colors.white.withValues(alpha: 0.05)
-            : const Color(0x14000000),
-      ),
+    return ColoredBox(
+      color: Theme.of(context).colorScheme.surface,
       child: child,
     );
   }
-}
-
-class _DotGridPainter extends CustomPainter {
-  _DotGridPainter({required this.color});
-
-  final Color color;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = color;
-    const spacing = 18.0;
-    for (var y = 0.0; y < size.height; y += spacing) {
-      for (var x = 0.0; x < size.width; x += spacing) {
-        canvas.drawCircle(Offset(x, y), 0.85, paint);
-      }
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant _DotGridPainter oldDelegate) =>
-      oldDelegate.color != color;
 }
 
 class AppCanvas extends StatelessWidget {
@@ -54,7 +28,7 @@ class AppCanvas extends StatelessWidget {
 
     final scheme = Theme.of(context).colorScheme;
     return ColoredBox(
-      color: scheme.surfaceContainerLowest,
+      color: scheme.surface,
       child: DotGridBackground(
         child: Center(
           child: Padding(

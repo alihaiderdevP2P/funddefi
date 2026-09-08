@@ -1,20 +1,13 @@
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { AppModule } from "./app.module";
+import { corsOriginDelegate } from "./cors-origins";
 import { setupRoleSwaggerDocs } from "./swagger-role-docs";
 
 const GLOBAL_PREFIX = "api/v1";
 
 async function createApp() {
   const app = await NestFactory.create(AppModule);
-
-  const allowedOrigins = (
-    process.env.CORS_ORIGINS ||
-    "http://localhost:3000,http://localhost:3001,http://127.0.0.1:3000,https://funddefi-client-six.vercel.app"
-  )
-    .split(",")
-    .map((origin) => origin.trim())
-    .filter(Boolean);
 
   app.setGlobalPrefix(GLOBAL_PREFIX);
 
@@ -27,7 +20,7 @@ async function createApp() {
   );
 
   app.enableCors({
-    origin: allowedOrigins,
+    origin: corsOriginDelegate,
     credentials: true,
   });
 
