@@ -11,6 +11,7 @@ import type { Server, Socket } from "socket.io";
 import { Logger, UseGuards, Inject, forwardRef } from "@nestjs/common";
 import { CampaignsService } from "../campaigns/campaigns.service";
 import { FundingService } from "../funding/funding.service";
+import { corsOriginDelegate } from "../cors-origins";
 import { WsJwtGuard } from "./guards/ws-jwt.guard";
 import type { JoinCampaignDto } from "./dto/websocket-events.dto";
 
@@ -21,14 +22,9 @@ interface AuthenticatedSocket extends Socket {
   };
 }
 
-const websocketAllowedOrigins = (process.env.CORS_ORIGINS || "http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,https://funddefi-client-six.vercel.app")
-  .split(",")
-  .map((origin) => origin.trim())
-  .filter(Boolean);
-
 @WebSocketGateway({
   cors: {
-    origin: websocketAllowedOrigins,
+    origin: corsOriginDelegate,
     credentials: true,
   },
 })

@@ -866,3 +866,10 @@ flutter run -d windows
 - **Real public users on Android:** Google Play ($25 once).
 - **Real public users on iPhone:** Apple Developer ($99/year) + TestFlight then App Store.
 - **Need iPhone without $99:** Flutter web (free) or a 7-day Xcode install on one device.
+
+
+
+cd D:\CODE\funddefi\fund-app
+flutter run -d web-server --web-hostname=127.0.0.1 --web-port=8080 --no-web-resources-cdn
+
+flutter run -d chrome --release --web-hostname=127.0.0.1 --no-web-resources-cdn
